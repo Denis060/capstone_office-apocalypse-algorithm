@@ -1,129 +1,118 @@
-# The "Office Apocalypse" Algorithm: Predicting Commercial Real Estate Vacancy Risk in NYC
+# Office Apocalypse Algorithm
 
-## 1. Project Overview
-This repository contains the complete codebase and documentation for the **"Office Apocalypse" Algorithm**, a capstone project for the **CS668 Analytics course at Pace University**.
+## Project Overview
 
-The goal is to develop a **machine learning model** to predict long-term vacancy risk for commercial office buildings in **New York City**, leveraging a diverse set of **public and alternative datasets**.
+For the complete project overview, objectives, timeline, and success criteria, see [`docs/project_overview.md`](docs/project_overview.md).
 
----
+## Data Sources
 
-## 2. Problem Statement
-The **COVID-19 pandemic** has fundamentally altered workplace culture, popularizing remote and hybrid models that reduce demand for traditional office space.
+The project utilizes several NYC government datasets:
 
-This shift threatens to create a **commercial vacancy crisis** in NYC, impacting:
-- **Property values & tax revenue**
-- **Small business viability**
-- **Neighborhood vitality**
+- **PLUTO (Primary Land Use Tax Lot Output)**: Comprehensive property information including building classifications, areas, and valuations.
+- **ACRIS (Automated City Register Information System)**: Real property legal documents and transactions.
+- **DOB Permit Issuance**: Department of Buildings construction and alteration permits.
+- **MTA Subway Hourly Ridership**: Public transportation usage data (2020-2024).
+- **Business Registry**: Active business registrations in NYC.
+- **Vacant Storefronts**: Reported vacant commercial spaces.
 
-This project aims to create a **predictive tool** to identify which properties are most at risk of prolonged vacancy (≥12 months), providing **actionable insights** for:
-- City planners → conversion and zoning strategies
-- Investors & developers → early detection of distressed assets
-- Small businesses → anticipating changes in foot traffic
+For detailed information on each dataset, including download links and data dictionaries, see `data/data_sources.md`.
 
----
+## Dataset Integration Strategy
 
-## 3. Repository Structure
+Each dataset captures different dimensions of office occupancy drivers:
+
+### Dataset Roles & Relevance
+- **PLUTO/MapPLUTO**: Building-level attributes (age, square footage, zoning, floors) - identifies vulnerable buildings
+- **ACRIS**: Property transactions (sales, mortgages, liens) - flags distressed properties at risk
+- **MTA Turnstile Data**: Subway ridership near buildings - indicates commuter demand
+- **Business Registry**: Active businesses nearby - signals economic activity
+- **Web-scraped Listings**: Direct vacancy evidence (days on market) - proxy for actual vacancy
+- **Tax Assessment**: Property valuations and arrears - detects financial stress
+
+### Integration Approach
+All datasets center on the **commercial office building** as the unit of analysis, linked by:
+- **BBL (Borough-Block-Lot)**: Primary key for property-level joins
+- **Address/Geocode**: For spatial proximity analysis
+- **ZIP Code**: For area-level aggregations
+
+### Merging Process
+1. **Start with PLUTO**: Universe of all NYC buildings
+2. **Join ACRIS**: Add transaction history and distress signals
+3. **Geospatial join MTA**: Aggregate ridership within proximity radius
+4. **Join Business Data**: Count active businesses nearby
+5. **Join Tax Assessment**: Add valuation and financial indicators
+6. **Join Listings Data**: Label vacancy status (target variable)
+
+This creates a comprehensive training dataset where **target = vacancy status** and **features = all other dimensions**.
+
+## Project Structure
+
 ```
 office-apocalypse-algorithm/
-├── data/
-│   ├── raw/                # Raw, immutable datasets
-│   └── processed/          # Cleaned, feature-engineered datasets
-│
-├── notebooks/
-│   ├── 01_data_acquisition.ipynb
-│   ├── 02_exploratory_data_analysis.ipynb
-│   ├── 03_feature_engineering.ipynb
-│   └── 04_model_prototyping.ipynb
-│
-├── scripts/
-│   ├── data_processing.py   # Full data cleaning pipeline
-│   └── train_model.py       # Train and evaluate final models
-│
-├── src/
-│   └── utils.py             # Helper functions
-│
-├── final_report/
-│   └── CS668_Final_Paper.pdf
-│
-├── requirements.txt         # Project dependencies
-└── README.md                # This file
+├── data/                    # Raw and processed datasets
+│   ├── raw/                # Original downloaded files
+│   ├── processed/          # Cleaned and transformed data
+│   └── features/           # Engineered features
+├── src/                    # Python source code
+├── notebooks/              # Jupyter notebooks for analysis
+├── models/                 # Saved machine learning models
+├── reports/                # Generated reports and visualizations
+├── tests/                  # Unit tests
+├── config/                 # Configuration files
+├── docs/                   # Additional documentation
+├── requirements.txt        # Python dependencies
+├── README.md               # This file
+└── .gitignore             # Git ignore rules
 ```
 
----
+## Setup
 
-## 4. Setup & Installation
+### Prerequisites
 
-**Clone the repository:**
-```bash
-git clone https://github.com/Denis060/office-apocalypse-algorithm.git
-cd office-apocalypse-algorithm
-```
+- Python 3.9 or higher
+- pip package manager
 
-**Create and activate a virtual environment:**
-```bash
-python -m venv venv
-source venv/bin/activate     # On Windows: venv\Scripts\activate
-```
+### Installation
 
-**Install dependencies:**
-```bash
-pip install -r requirements.txt
-```
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Denis060/office-apocalypse-algorithm.git
+   cd office-apocalypse-algorithm
+   ```
 
-**Requirements file structure:**
-The `requirements.txt` is organized by category for clarity:
+2. Create a virtual environment (recommended):
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
 
-```
-# Core Libraries
-pandas
-numpy
-scikit-learn
-matplotlib
-seaborn
-geopandas
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-# Machine Learning
-xgboost
-lightgbm
-shap
+## Usage
 
-# Visualization & Mapping
-folium
-mapboxgl
+1. **Data Exploration**: Start with notebooks in `notebooks/` to explore the datasets.
 
-# App/Deployment
-streamlit
+2. **Data Processing**: Run scripts in `src/` to clean and process raw data.
 
-# Notebook Environment
-jupyterlab
-notebook
+3. **Modeling**: Develop and train predictive models for office vacancy.
 
-# Data Acquisition
-beautifulsoup4
-requests
-```
+4. **Analysis**: Generate reports and visualizations in `reports/`.
 
-**Run the analysis notebooks:**
-All workflows are documented in the `/notebooks` folder.
+## Contributing
 
----
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
 
-## 5. Team Members
-| Name                    | Role                          |
-|-------------------------|-------------------------------|
-| **Ibrahim Denis Fofanah** |  |
-| **Bright Arowny Zaman**   |                      |
-| **Jeevan Hemanth Yendluri** |                  |
-|
+## License
 
----
+[Add license information if applicable]
 
-## 6. Large Dataset Access
+## Contact
 
-Due to GitHub's file size limits, large raw datasets are not included in this repository. To use the main dataset for this project, please download it from Google Drive:
-
-**[Download ACRIS_-_Real_Property_Legals_20250915.csv (Google Drive)](https://drive.google.com/file/d/1B73K15zu3-OmoG_qy7XGhY1i-uq7HBeQ/view?usp=drive_link)**
-
-After downloading, place the file in the `data/raw/` directory.
-
-> **Note:** All large CSV files in `data/raw/` are excluded from version control via `.gitignore`.
+[Add contact information]

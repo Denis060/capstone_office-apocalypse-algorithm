@@ -1,28 +1,12 @@
-
-# Core Libraries
-pandas
-numpy
-scikit-learn
-matplotlib
-seaborn
-geopandas
-
-# Machine Learning
-xgboost
-lightgbm
-shap
-
-# Visualization & Mapping
-folium
-mapboxgl
-
-# App/Deployment
-streamlit
-
-# Notebook Environment
-jupyterlab
-notebook
-
-# Data Acquisition
-beautifulsoup4
-requests
+pandas>=2.0.0
+numpy>=1.24.0
+scikit-learn>=1.3.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+jupyter>=1.0.0
+notebook>=7.0.0
+ipykernel>=6.0.0
+requests>=2.31.0
+geopandas>=0.13.0
+folium>=0.14.0
+plotly>=5.15.0
