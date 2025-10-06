@@ -1,11 +1,32 @@
 # NYC Office Vacancy Prediction - Data Sources Documentation
 
+**Project**: Office Apocalypse Algorithm: NYC Office Building Vacancy Risk Assessment  
+**Author**: Data Science Capstone Team  
+**Date**: October 2025  
+**Course**: Master's Data Science Capstone Project  
+
 ## Overview
-This document provides comprehensive information about all datasets used in the "Office Apocalypse" Algorithm project, including download links, data dictionaries, and integration notes.
+
+This document provides comprehensive information about all 6 datasets used in the Office Apocalypse Algorithm project. Each dataset contributes unique insights to office building vacancy risk prediction through sophisticated BBL-based integration methodology.
+
+**Integration Summary**: 6 datasets → 7,191 office buildings → 139 engineered features → 99.99% ROC-AUC model performance
 
 ---
 
-## 1. Core Datasets
+## 📊 Dataset Integration Architecture
+
+```
+1. PLUTO (Foundation) ──┐
+2. ACRIS (Financial) ───┤
+3. MTA (Accessibility) ─┼─→ BBL Integration ─→ Feature Engineering ─→ ML Model
+4. Business (Economic) ─┤
+5. DOB (Investment) ────┤  
+6. Storefronts (Decline) ┘
+```
+
+---
+
+## 1. Core Datasets (All 6 Required for Model Performance)
 
 ### 1.1 PLUTO (Primary Land Use Tax Lot Output)
 **Source**: NYC Department of City Planning

@@ -1,0 +1,93 @@
+{
+  "analysis_results": {
+    "PLUTO": {
+      "feature_count": 11,
+      "features": [
+        "building_age",
+        "numfloors",
+        "bldgarea",
+        "lotarea",
+        "officearea",
+        "floor_area_ratio",
+        "office_percentage",
+        "is_office_building",
+        "is_commercial",
+        "value_per_sqft",
+        "land_value_ratio"
+      ],
+      "missing": []
+    },
+    "ACRIS": {
+      "feature_count": 2,
+      "features": [
+        "has_recent_transaction",
+        "transaction_distress_score"
+      ],
+      "missing": [
+        "total_transaction_count",
+        "transaction_count_last_3y",
+        "transaction_count_last_1y"
+      ]
+    },
+    "MTA": {
+      "feature_count": 4,
+      "features": [
+        "high_ridership_area",
+        "nearby_stations_count",
+        "avg_daily_ridership_500m",
+        "total_weekly_ridership_nearby"
+      ],
+      "missing": []
+    },
+    "BUSINESS": {
+      "feature_count": 1,
+      "features": [
+        "business_count_zip"
+      ],
+      "missing": []
+    },
+    "DOB": {
+      "feature_count": 4,
+      "features": [
+        "total_permit_count",
+        "active_permit_count",
+        "renovation_permit_count",
+        "recent_permit_activity"
+      ],
+      "missing": []
+    },
+    "STOREFRONTS": {
+      "feature_count": 2,
+      "features": [
+        "storefront_vacant_count",
+        "storefront_vacant_flag"
+      ],
+      "missing": []
+    },
+    "DERIVED": {
+      "feature_count": 8,
+      "features": [
+        "temporal_trend_score",
+        "building_age_category_young",
+        "building_age_category_mature",
+        "building_age_category_old",
+        "building_age_category_historic",
+        "business_density_category_medium",
+        "business_density_category_high",
+        "business_density_category_very_high"
+      ],
+      "missing": []
+    }
+  },
+  "feature_distribution": {
+    "PLUTO": 11,
+    "ACRIS": 2,
+    "MTA": 4,
+    "BUSINESS": 1,
+    "DOB": 4,
+    "STOREFRONTS": 2,
+    "DERIVED": 8
+  },
+  "total_features": 32,
+  "coverage_ratio": 0.9142857142857143
+}

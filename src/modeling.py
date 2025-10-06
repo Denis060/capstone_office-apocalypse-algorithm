@@ -59,7 +59,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
-def load_features(features_dir: str = "data/features") -> Tuple[pd.DataFrame, pd.Series]:
+def load_features(features_dir: str = "data/features", x_filename: str = None) -> Tuple[pd.DataFrame, pd.Series]:
     """
     Load engineered features and target variable.
 
@@ -72,7 +72,8 @@ def load_features(features_dir: str = "data/features") -> Tuple[pd.DataFrame, pd
     features_path = Path(features_dir)
 
     # Load features
-    X_path = features_path / "X_features.csv"
+    # Allow caller to specify an alternate X file (avoid overwriting canonical X_features.csv)
+    X_path = features_path / (x_filename if x_filename is not None else "X_features.csv")
     y_path = features_path / "y_target.csv"
 
     if not X_path.exists() or not y_path.exists():
@@ -336,7 +337,8 @@ def plot_roc_curve(models_dict: Dict[str, Any], X_test: pd.DataFrame,
 
 
 def run_modeling_pipeline(features_dir: str = "data/features",
-                         results_dir: str = "results") -> Dict[str, Any]:
+                         results_dir: str = "results",
+                         x_filename: str = None) -> Dict[str, Any]:
     """
     Execute complete modeling pipeline.
 
@@ -354,7 +356,8 @@ def run_modeling_pipeline(features_dir: str = "data/features",
     results_path.mkdir(exist_ok=True)
 
     # Load and prepare data
-    X, y = load_features(features_dir)
+    # Load features. If x_filename is provided, load that file from the features directory
+    X, y = load_features(features_dir, x_filename=x_filename)
     X_train, X_test, y_train, y_test = prepare_data(X, y)
 
     # Train models

@@ -460,6 +460,99 @@ def merge_business_to_pluto(pluto_df: pd.DataFrame, data_dir: str = "data/raw") 
         return pluto_df
 
 
+def ingest_vacant_storefronts(processed_df: pd.DataFrame, raw_dir: str = "data/raw") -> pd.DataFrame:
+    """
+    Ingest the Vacant Storefronts dataset, aggregate vacancy counts by BBL,
+    and merge the results into the processed integrated dataframe.
+
+    Strategy:
+    - Use `BBL` or `Borough Block Lot` from the storefronts CSV as the merge key.
+    - Aggregate reported vacant flags per BBL (count and binary flag).
+    - Read in chunks to handle large file sizes.
+
+    Args:
+        processed_df: The already processed/integrated PLUTO-based dataframe
+        raw_dir: Directory containing raw data files
+
+    Returns:
+        DataFrame with new storefront vacancy features merged
+    """
+    file_path = Path(raw_dir) / "Storefronts_Reported_Vacant_or_Not_20250915.csv"
+
+    if not file_path.exists():
+        print(f"Vacant storefronts file not found at {file_path}. Skipping storefront merge.")
+        processed_df['storefront_vacant_count'] = 0
+        processed_df['storefront_vacant_flag'] = 0
+        return processed_df
+
+    print(f"Ingesting storefronts from {file_path} in chunks...")
+
+    agg_chunks = []
+    for chunk in pd.read_csv(file_path, chunksize=200_000, dtype=str, low_memory=True):
+        # Normalize BBL column name
+        if 'BBL' in chunk.columns:
+            chunk['bbl'] = chunk['BBL']
+        elif 'Borough Block Lot' in chunk.columns:
+            chunk['bbl'] = chunk['Borough Block Lot']
+        else:
+            # If no BBL, try to locate a column containing 'block' and 'lot'
+            candidates = [c for c in chunk.columns if 'block' in c.lower() and 'lot' in c.lower()]
+            if candidates:
+                chunk['bbl'] = chunk[candidates[0]]
+            else:
+                chunk['bbl'] = None
+
+        chunk['bbl'] = chunk['bbl'].astype(str).str.strip()
+
+        # Determine vacancy indicator column (prefer explicit columns)
+        vac_cols = [c for c in chunk.columns if 'vacant' in c.lower()]
+        if vac_cols:
+            vac_col = vac_cols[0]
+            chunk['is_vacant_reported'] = chunk[vac_col].str.upper().fillna('N').isin(['YES', 'Y', 'TRUE', '1']).astype(int)
+        else:
+            # Fallback: if Primary Business Activity is blank or 'NO BUSINESS ACTIVITY IDENTIFIED'
+            if 'Primary Business Activity' in chunk.columns:
+                chunk['is_vacant_reported'] = chunk['Primary Business Activity'].isna().astype(int)
+            else:
+                chunk['is_vacant_reported'] = 0
+
+        # Aggregate by BBL within this chunk
+        grp = chunk.groupby('bbl', dropna=True)['is_vacant_reported'].agg(['sum', 'max']).reset_index()
+        grp = grp.rename(columns={'sum': 'storefront_vacant_count_chunk', 'max': 'storefront_vacant_flag_chunk'})
+        agg_chunks.append(grp)
+
+    if not agg_chunks:
+        print("No storefront data parsed; adding zero columns.")
+        processed_df['storefront_vacant_count'] = 0
+        processed_df['storefront_vacant_flag'] = 0
+        return processed_df
+
+    combined = pd.concat(agg_chunks, ignore_index=True)
+    combined_agg = combined.groupby('bbl', dropna=True).agg({
+        'storefront_vacant_count_chunk': 'sum',
+        'storefront_vacant_flag_chunk': 'max'
+    }).reset_index()
+    combined_agg = combined_agg.rename(columns={
+        'storefront_vacant_count_chunk': 'storefront_vacant_count',
+        'storefront_vacant_flag_chunk': 'storefront_vacant_flag'
+    })
+
+    # Ensure processed_df has 'bbl' column
+    if 'bbl' not in processed_df.columns:
+        if 'BBL' in processed_df.columns:
+            processed_df['bbl'] = processed_df['BBL'].astype(str)
+        else:
+            processed_df['bbl'] = processed_df.get('bbl', None)
+
+    # Merge and fill defaults
+    processed_df = processed_df.merge(combined_agg, how='left', on='bbl')
+    processed_df['storefront_vacant_count'] = processed_df['storefront_vacant_count'].fillna(0).astype(int)
+    processed_df['storefront_vacant_flag'] = processed_df['storefront_vacant_flag'].fillna(0).astype(int)
+
+    print(f"Merged storefront vacancy for {combined_agg.shape[0]} BBLs")
+    return processed_df
+
+
 def merge_mta_ridership_geospatial(pluto_df: pd.DataFrame, data_dir: str = "data/raw", radius_meters: int = 500) -> pd.DataFrame:
     """
     Merge MTA ridership data with PLUTO using geospatial proximity.

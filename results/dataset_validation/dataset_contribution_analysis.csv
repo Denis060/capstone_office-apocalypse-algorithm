@@ -1,0 +1,7 @@
+Dataset,Features_Created,Coverage_Rate,Data_Quality,Business_Value
+PLUTO,8,"7,191 buildings (100%)",Excellent - Complete building universe,"Foundation: Building characteristics, valuation, zoning"
+ACRIS,3,0 buildings with transactions,Good - Financial distress indicators,"Critical: Ownership changes, financial distress signals"
+MTA Ridership,1,"7,191 buildings (proxy by borough)",Good - Transportation accessibility,"Important: Commuter access, location desirability"
+Business Registry,1,"7,191 buildings (proxy by borough)",Good - Economic activity indicators,"Valuable: Economic vitality, neighborhood health"
+DOB Permits,1,"7,191 buildings (proxy)",Good - Investment activity,"Predictive: Investment confidence, building improvements"
+Vacant Storefronts,1,"7,191 buildings (proxy)",Good - Neighborhood distress,"Early Warning: Neighborhood decline, spillover effects"
