@@ -1,0 +1,29 @@
+MODEL ROBUSTNESS ANALYSIS RESULTS
+========================================
+
+Analysis Date: 2025-10-06 22:31
+
+MODEL PERFORMANCE:
+Logistic Regression:
+  Accuracy: 0.9951
+  ROC-AUC: 0.9999
+
+Random Forest:
+  Accuracy: 0.9729
+  ROC-AUC: 0.9962
+
+Gradient Boosting:
+  Accuracy: 0.9861
+  ROC-AUC: 0.9989
+
+XGBoost:
+  Accuracy: 0.9854
+  ROC-AUC: 0.9990
+
+SUSPICIOUS FEATURES (potential leakage):
+  - neighborhood_vacancy_risk
+  - neighborhood_risk
+  - investment_risk
+  - competitive_risk
+  - vacancy_risk_alert
+  - target_high_vacancy_risk

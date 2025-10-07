@@ -1,0 +1,31 @@
+CLEAN MODEL RESULTS (NO DATA LEAKAGE)
+=============================================
+
+Analysis Date: 2025-10-06 22:33
+
+CLEAN MODEL PERFORMANCE:
+Logistic Regression:
+  Accuracy: 0.9944 (99.4%)
+  ROC-AUC: 0.9998
+  F1-Score: 0.9861
+
+Random Forest:
+  Accuracy: 0.9493 (94.9%)
+  ROC-AUC: 0.9907
+  F1-Score: 0.8646
+
+Gradient Boosting:
+  Accuracy: 0.9861 (98.6%)
+  ROC-AUC: 0.9993
+  F1-Score: 0.9647
+
+XGBoost:
+  Accuracy: 0.9840 (98.4%)
+  ROC-AUC: 0.9990
+  F1-Score: 0.9603
+
+FEATURES REMOVED (POTENTIAL LEAKAGE):
+  - investment_risk
+  - competitive_risk
+  - neighborhood_risk
+  - vacancy_risk_alert
