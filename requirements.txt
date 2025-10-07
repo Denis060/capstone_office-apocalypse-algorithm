@@ -1,12 +1,44 @@
-pandas>=2.0.0
-numpy>=1.24.0
-scikit-learn>=1.3.0
-matplotlib>=3.7.0
-seaborn>=0.12.0
-jupyter>=1.0.0
-notebook>=7.0.0
-ipykernel>=6.0.0
-requests>=2.31.0
-geopandas>=0.13.0
-folium>=0.14.0
-plotly>=5.15.0
+# Office Apocalypse Algorithm - Requirements
+# NYC Office Building Vacancy Risk Prediction System
+# Python 3.12+ required
+
+# Core Data Science Libraries
+pandas>=2.3.3
+numpy>=2.3.3
+scikit-learn>=1.7.2
+scipy>=1.16.2
+joblib>=1.5.2
+
+# Visualization Libraries
+matplotlib>=3.10.6
+seaborn>=0.13.2
+plotly>=6.3.1
+folium>=0.20.0
+
+# Geospatial Analysis
+geopandas>=1.1.1
+shapely>=2.1.2
+pyproj>=3.7.2
+pyogrio>=0.11.1
+
+# Jupyter Environment
+jupyter>=1.1.1
+notebook>=7.4.7
+jupyterlab>=4.4.9
+ipykernel>=6.30.1
+ipython>=9.6.0
+
+# Development Tools
+pytest>=7.0.0
+black>=23.0.0
+flake8>=6.0.0
+
+# Additional Utilities
+requests>=2.32.5
+python-dateutil>=2.9.0
+pytz>=2025.2
+tzdata>=2025.2
+
+# Environment Management
+pip>=24.3.1
+setuptools>=80.9.0
