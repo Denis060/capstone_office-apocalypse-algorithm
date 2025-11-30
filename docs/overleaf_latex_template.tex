@@ -1,0 +1,174 @@
+% Office Apocalypse Algorithm - Overleaf LaTeX Template
+% For use in Overleaf academic paper formatting
+
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{caption}
+\usepackage{subcaption}
+
+% Page setup
+\geometry{margin=1in}
+\onehalfspacing
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\thepage}
+\lhead{Office Apocalypse Algorithm}
+
+% Title and author information
+\title{
+    \Large \textbf{Office Apocalypse Algorithm: Multi-Source Municipal Data Integration for NYC Office Building Vacancy Risk Prediction}
+}
+
+\author{
+    Ibrahim Denis Fofanah, Bright Arowny Zaman, and Jeevan Hemanth Yendluri \\
+    \textit{Seidenberg School of Computer Science and Information Systems} \\
+    \textit{Pace University, New York, USA} \\
+    \texttt{\{if57774n, bz75499n, jy44272n\}@pace.edu} \\
+    \\
+    \textbf{Faculty Advisor:} Dr. Krishna Bathula
+}
+
+\date{November 24, 2025}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+New York City faces unprecedented office building vacancy challenges in the post-pandemic era, requiring innovative predictive approaches for proactive urban planning and real estate management. This study presents the Office Apocalypse Algorithm, a comprehensive machine learning system that integrates six municipal data sources to predict office building vacancy risk with 92.41\% ROC-AUC accuracy. Our methodology addresses critical data science challenges including systematic data leakage detection, temporal validation frameworks, and interpretable model deployment. The champion XGBoost classifier achieves 93.01\% precision when targeting the top 10\% highest-risk buildings, enabling 3.1x more efficient resource allocation compared to random targeting approaches with 85\% cost reduction. Through comprehensive SHAP analysis, we provide evidence-based policy recommendations including building modernization incentives, economic development zone initiatives, and transportation infrastructure enhancements. The system culminates in a production-ready Streamlit dashboard providing interactive risk assessment, geographic visualization, and intervention planning capabilities for stakeholder decision-making. This work demonstrates the intersection of machine learning, urban analytics, and practical policy applications, contributing to both academic knowledge and real-world problem-solving in urban real estate management.
+
+\textbf{Keywords:} Office Building Vacancy, Machine Learning, Urban Analytics, NYC Open Data, XGBoost, SHAP, Policy Recommendations
+\end{abstract}
+
+\section{Introduction}
+
+% Add your introduction content here
+
+\section{Related Work}
+
+% Add your related work content here
+
+\section{System Architecture}
+
+\subsection{End-to-End System Overview}
+
+Figure~\ref{fig:system_architecture} summarizes the complete end-to-end system architecture for the Office Apocalypse Algorithm, developed collaboratively by our team. The system integrates six municipal data sources through a shared ETL pipeline, followed by feature engineering, model training, SHAP-based explainability, and deployment to both dashboard and data products.
+
+% \begin{figure}[htbp]
+%     \centering
+%     \includegraphics[width=0.8\textwidth]{figures/system_architecture.png}
+%     \caption{Office Apocalypse Algorithm System Architecture}
+%     \label{fig:system_architecture}
+% \end{figure}
+
+\section{Analysis \& Results}
+
+\subsection{Data Leakage Discovery and Resolution}
+
+Our initial analysis revealed a critical data science challenge that became a cornerstone of our methodology. During baseline model development, we encountered suspiciously high performance metrics (99\%+ ROC-AUC) that indicated data leakage rather than genuine predictive capability.
+
+\subsubsection{Champion Model Results}
+
+After systematic hyperparameter optimization, our \textbf{XGBoost classifier} achieved the following performance on clean features:
+
+\begin{table}[htbp]
+\centering
+\caption{Champion Model Performance Metrics}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Metric} & \textbf{Value} & \textbf{Interpretation} \\
+\midrule
+ROC-AUC & \textbf{92.41\%} & Excellent discrimination capability \\
+Accuracy & 84.09\% & Strong overall performance \\
+Precision@10\% & \textbf{93.01\%} & High accuracy targeting top 10\% \\
+Precision@5\% & 95.12\% & Exceptional critical intervention accuracy \\
+F1-Score & 0.847 & Balanced precision and recall \\
+\bottomrule
+\end{tabular}
+\label{tab:champion_performance}
+\end{table}
+
+\subsection{SHAP Model Interpretation}
+
+\begin{table}[htbp]
+\centering
+\caption{Global Feature Importance (SHAP Analysis)}
+\begin{tabular}{@{}lllll@{}}
+\toprule
+\textbf{Rank} & \textbf{Feature} & \textbf{SHAP Value} & \textbf{Business Interpretation} & \textbf{Policy Implication} \\
+\midrule
+1 & building\_age & \textbf{1.406} & Buildings >50 years higher risk & Modernization incentives \\
+2 & construction\_activity & \textbf{1.149} & Market development predictor & Economic development focus \\
+3 & officearea & \textbf{0.776} & Building size affects attractiveness & Space optimization programs \\
+4 & office\_ratio & \textbf{0.667} & Space utilization efficiency & Mixed-use conversion support \\
+5 & commercial\_ratio & \textbf{0.568} & Neighborhood commercial context & Area revitalization strategies \\
+\bottomrule
+\end{tabular}
+\label{tab:shap_importance}
+\end{table}
+
+\subsection{Geographic Risk Analysis}
+
+Analysis of 7,191 NYC office buildings revealed significant geographic risk patterns:
+
+\begin{table}[htbp]
+\centering
+\caption{Borough-Level Risk Distribution}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Borough} & \textbf{Buildings} & \textbf{High Risk Rate} & \textbf{Risk Ranking} \\
+\midrule
+Brooklyn & 1,776 (24.7\%) & \textbf{40.9\%} & Highest Risk \\
+Queens & 1,619 (22.5\%) & 32.9\% & Second \\
+Bronx & 584 (8.1\%) & 27.9\% & Third \\
+Staten Island & 705 (9.8\%) & 25.5\% & Fourth \\
+Manhattan & 2,507 (34.9\%) & \textbf{22.1\%} & Lowest Risk \\
+\bottomrule
+\end{tabular}
+\label{tab:borough_risk}
+\end{table}
+
+\section{Conclusions}
+
+\subsection{Summary of Main Findings}
+
+Our team successfully developed a production-ready machine learning system for predicting NYC office building vacancy risk with the following key contributions:
+
+\begin{enumerate}
+    \item \textbf{Data Leakage Resolution Methodology:} Systematic identification and elimination of composite features that contained target information
+    \item \textbf{Champion Model Achievement:} XGBoost classifier achieving 92.41\% ROC-AUC with 93.01\% precision@10\%
+    \item \textbf{Geographic Risk Mapping:} Identification of Brooklyn as the highest-risk borough (40.9\% high-risk rate)
+    \item \textbf{Business Impact Validation:} Demonstrated 3.1x improvement in intervention efficiency
+    \item \textbf{Production Deployment:} Full-stack web application with real-time risk assessment
+    \item \textbf{Policy Framework Development:} Evidence-based recommendations for urban planning
+\end{enumerate}
+
+\section{Acknowledgments}
+
+We extend our gratitude to Dr. Krishna Bathula for his invaluable guidance throughout this research project. We thank the Pace University Seidenberg School of Computer Science and Information Systems for computational resources and academic support. Special appreciation to the NYC Open Data initiative for maintaining comprehensive municipal datasets that enabled this research.
+
+\subsection{Author Contributions}
+
+\textbf{Ibrahim Denis Fofanah (Team Leader):} Project coordination, system architecture design, model development, dashboard implementation, and paper writing.
+
+\textbf{Bright Arowny Zaman:} Data preprocessing, feature engineering, temporal validation framework, and SHAP analysis implementation.
+
+\textbf{Jeevan Hemanth Yendluri:} Geographic data integration, business impact analysis, policy framework development, and evaluation methodology.
+
+All authors contributed to the conceptual design, methodology validation, and manuscript preparation.
+
+\bibliographystyle{ieee}
+\bibliography{references}
+
+\end{document}

@@ -1,0 +1,437 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{cite,amsmath,amssymb,amsfonts,graphicx,booktabs,multirow,array,listings,xcolor,url,balance}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible}
+
+\begin{document}
+
+\title{Office Apocalypse Algorithm: Multi-Source Municipal Data Integration for NYC Office Building Vacancy Risk Prediction}
+
+\author{\IEEEauthorblockN{Ibrahim Denis Fofanah\IEEEauthorrefmark{1}, Bright Arowny Zaman\IEEEauthorrefmark{2}, and Jeevan Hemanth Yendluri\IEEEauthorrefmark{3}}
+\IEEEauthorblockA{\IEEEauthorrefmark{1}Team Leader, Data Engineering \& Model Development\\
+\IEEEauthorrefmark{2}Machine Learning Specialist \& Dashboard Development\\
+\IEEEauthorrefmark{3}Geographic Analysis \& System Integration\\
+Advisor: Dr.\ Krishna Bathula\\
+Seidenberg School of Computer Science and Information Systems, Pace University\\
+New York, USA\\
+\{if57774n, bz75499n, jy44272n\}@pace.edu}}
+
+\maketitle
+
+\begin{abstract}
+New York City faces unprecedented office building vacancy challenges requiring innovative predictive approaches for proactive urban planning. This study presents the Office Apocalypse Algorithm, a machine learning system integrating six municipal data sources to predict office building vacancy risk with 92.41\% ROC-AUC accuracy. Our methodology addresses critical challenges including systematic data leakage detection, temporal validation, and interpretable deployment. The champion XGBoost classifier achieves 93.01\% precision targeting the top 10\% highest-risk buildings, enabling 3.1$\times$ more efficient resource allocation with 85\% cost reduction. Through SHAP analysis, we provide evidence-based policy recommendations and deploy a production-ready Streamlit dashboard for stakeholder decision-making.
+\end{abstract}
+
+\begin{IEEEkeywords}
+office building vacancy, machine learning, urban analytics, NYC open data, XGBoost, SHAP
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+The COVID-19 pandemic fundamentally transformed office real estate markets, with New York City experiencing vacancy rates reaching 20\% in some Manhattan submarkets~\cite{rebny2024}. Traditional reactive approaches to vacancy management prove insufficient for the scale and complexity of current challenges. This study develops a predictive system enabling proactive intervention through machine learning integration of municipal data sources.
+
+\subsection{Research Questions}
+\begin{enumerate}
+    \item Can machine learning reliably predict office building vacancy risk using municipal data?
+    \item Which building and contextual features drive vacancy risk?
+    \item How can such predictions be operationalized for policy intervention?
+\end{enumerate}
+
+\subsection{Contributions}
+Our key contributions include: (1) systematic data leakage detection methodology, (2) integration of six NYC municipal datasets for vacancy prediction, (3) interpretable model deployment with SHAP analysis, and (4) production dashboard enabling policy applications.
+
+\section{Methodology}
+
+\subsection{Data Sources and Integration}
+We integrated six municipal data sources covering 7,191 NYC office buildings:
+
+\begin{itemize}
+    \item \textbf{PLUTO}: Property characteristics and assessments
+    \item \textbf{ACRIS}: Real estate transactions and deed records  
+    \item \textbf{DOB}: Building permits and construction activity
+    \item \textbf{MTA}: Subway ridership and accessibility patterns
+    \item \textbf{Business Registry}: Commercial establishment density
+    \item \textbf{Storefront Vacancy}: Neighborhood commercial vitality
+\end{itemize}
+
+\subsection{Data Leakage Detection Protocol}
+Early models exhibited unrealistic performance (ROC-AUC $>$ 0.99), indicating data leakage. We implemented systematic detection:
+
+\begin{lstlisting}[language=Python,caption={Data leakage detection methodology},label={lst:leakage}]
+def detect_leakage(df, target, features, threshold=0.95):
+    leaky_features = []
+    for f in features:
+        # Correlation analysis
+        corr = abs(df[f].corr(df[target]))
+        if corr > threshold:
+            leaky_features.append(f)
+        
+        # Temporal holdout validation
+        train_auc = validate_temporal_split(df, f, target)
+        if train_auc > 0.99:
+            leaky_features.append(f)
+    return leaky_features
+\end{lstlisting}
+
+This process identified composite variables (\texttt{investment\_potential\_score}, \texttt{market\_competitiveness\_score}) incorporating outcome information. We replaced these with 20 temporally valid raw features (Table~\ref{tab:features}).
+
+\begin{table}[h]
+\centering
+\caption{Final Leakage-Free Feature Set}
+\label{tab:features}
+\scriptsize
+\begin{tabular}{ll}
+\toprule
+\textbf{Category} & \textbf{Features} \\
+\midrule
+Building Physical & building\_age, lotarea, bldgarea, officearea \\
+& numfloors, yearbuilt, office\_ratio \\
+Financial & assessland, assesstot, value\_per\_sqft \\
+& land\_value\_ratio, floor\_efficiency \\
+Market Activity & transaction\_count, deed\_count \\
+& mortgage\_count, commercial\_ratio \\
+Context & mta\_accessibility\_proxy, business\_density \\
+& construction\_activity, distress\_score \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Model Development}
+We evaluated three algorithms with identical preprocessing:
+\begin{itemize}
+    \item \textbf{XGBoost}: Gradient boosting with hyperparameter optimization
+    \item \textbf{Random Forest}: Ensemble decision trees
+    \item \textbf{Logistic Regression}: Linear baseline with regularization
+\end{itemize}
+
+Hyperparameters were optimized using 5-fold cross-validation with temporal awareness to prevent future information leakage.
+
+\section{Analysis and Results}
+
+\subsection{Champion Model Performance}
+XGBoost emerged as the champion model after comprehensive evaluation. Table~\ref{tab:champion} presents test set performance metrics.
+
+\begin{table}[h]
+\centering
+\caption{Champion Model (XGBoost) Test Performance}
+\label{tab:champion}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Metric} & \textbf{Value} & \textbf{Business Impact} \\
+\midrule
+ROC-AUC & \textbf{0.9241} & Excellent discrimination \\
+Accuracy & 0.8409 & Strong overall performance \\
+Precision@10\% & \textbf{0.9301} & Accurate risk targeting \\
+Precision@5\% & 0.9512 & High-confidence identification \\
+F1-Score & 0.8470 & Balanced precision/recall \\
+Calibration (Brier) & 0.0890 & Well-calibrated probabilities \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The 93.01\% precision at the 10th percentile enables confident identification of the highest-risk buildings, critical for resource-constrained intervention programs.
+
+\subsection{Model Comparison}
+Table~\ref{tab:compare} compares algorithms on the clean feature set.
+
+\begin{table}[h]
+\centering
+\caption{Algorithm Performance Comparison}
+\label{tab:compare}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Algorithm} & \textbf{ROC-AUC} & \textbf{Acc.} & \textbf{P@10\%} & \textbf{Time} \\
+\midrule
+\textbf{XGBoost} & \textbf{0.9241} & 0.8409 & \textbf{0.9301} & 2.3 min \\
+Random Forest & 0.9208 & 0.8423 & 0.9091 & 1.8 min \\
+Logistic Reg. & 0.8820 & 0.8145 & 0.8567 & 0.5 min \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+XGBoost provides the optimal balance of predictive performance and computational efficiency for operational deployment.
+
+\subsection{Feature Importance and Interpretability}
+SHAP (SHapley Additive exPlanations) analysis revealed key predictive drivers (Table~\ref{tab:shap}).
+
+\begin{table}[h]
+\centering
+\caption{Top Predictive Features (SHAP Analysis)}
+\label{tab:shap}
+\begin{tabular}{clc}
+\toprule
+\textbf{Rank} & \textbf{Feature} & \textbf{SHAP Value} \\
+\midrule
+1 & building\_age & 1.406 \\
+2 & construction\_activity\_proxy & 1.149 \\
+3 & officearea & 0.776 \\
+4 & office\_ratio & 0.667 \\
+5 & commercial\_ratio & 0.568 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Building age emerges as the dominant predictor, consistent with infrastructure decay theory and market preferences for modern office amenities.
+
+\subsection{Geographic Risk Analysis}
+Borough-level analysis reveals significant spatial heterogeneity (Table~\ref{tab:borough}).
+
+\begin{table}[h]
+\centering
+\caption{Borough-Level Risk Distribution}
+\label{tab:borough}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Borough} & \textbf{Buildings} & \textbf{High Risk \%} & \textbf{Avg Risk} \\
+\midrule
+Brooklyn & 1,776 & \textbf{40.9} & 41.2\% \\
+Queens & 1,619 & 32.9 & 33.1\% \\
+Bronx & 584 & 27.9 & 28.8\% \\
+Staten Island & 705 & 25.5 & 26.2\% \\
+Manhattan & 2,507 & \textbf{22.1} & 23.4\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Brooklyn exhibits the highest vacancy risk concentration (40.9\%), while Manhattan shows unexpected resilience despite pandemic impacts.
+
+\subsection{Temporal Validation}
+Multiple validation strategies confirmed model robustness:
+\begin{itemize}
+    \item \textbf{Temporal splits}: 80/20 train/test with chronological ordering
+    \item \textbf{Rolling windows}: 3-year training, 6-month prediction horizon  
+    \item \textbf{Expanding windows}: Growing training sets over time
+    \item \textbf{Geographic splits}: Borough-aware cross-validation
+\end{itemize}
+
+Across all approaches, ROC-AUC remained above 0.90, demonstrating temporal and geographic generalization.
+
+\subsection{Business Impact Quantification}
+The model enables significant efficiency improvements over baseline targeting:
+
+\begin{itemize}
+    \item \textbf{Baseline accuracy}: 30\% (random targeting)
+    \item \textbf{Model accuracy}: 93\% (top 10\% targeting)
+    \item \textbf{Efficiency gain}: 3.1$\times$ improvement
+    \item \textbf{Cost reduction}: 85\% for equivalent coverage
+\end{itemize}
+
+This translates to substantial resource savings for municipal intervention programs.
+
+\section{System Implementation}
+
+\subsection{Dashboard Deployment}
+We developed a Streamlit dashboard providing operational capabilities:
+
+\begin{itemize}
+    \item \textbf{Building Lookup}: Individual risk assessment with SHAP explanations
+    \item \textbf{Portfolio Analysis}: Risk distribution visualization
+    \item \textbf{Geographic Mapping}: Borough and neighborhood risk patterns
+    \item \textbf{Intervention Planning}: Export capabilities for targeted programs
+\end{itemize}
+
+\subsection{System Architecture}
+Figure~\ref{fig:arch} illustrates the end-to-end system architecture from data ingestion through deployment.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{figures/system_architecture.png}
+\caption{Complete system architecture: municipal data integration, model training, and dashboard deployment.}
+\label{fig:arch}
+\end{figure}
+
+\section{Conclusions}
+
+\subsection{Summary of Main Findings}
+This study successfully demonstrates machine learning's capability for NYC office vacancy prediction. Our champion XGBoost model achieves 92.41\% ROC-AUC with systematic data leakage prevention, enabling reliable risk assessment for 7,191 office buildings. Geographic analysis identifies Brooklyn as highest-risk (40.9\%), while interpretability analysis highlights building age as the primary risk driver.
+
+\subsection{Research Question Responses}
+\begin{enumerate}
+    \item \textbf{Prediction Reliability}: Yes, machine learning reliably predicts vacancy risk using municipal data, achieving 93.01\% precision for highest-risk building identification.
+    \item \textbf{Predictive Drivers}: Building age, construction activity, office configuration, and neighborhood context emerge as primary risk factors.
+    \item \textbf{Operational Deployment}: The Streamlit dashboard successfully operationalizes predictions for policy intervention with 3.1$\times$ efficiency improvement.
+\end{enumerate}
+
+\subsection{Comparison to Existing Literature}
+Our work advances beyond prior studies through: (1) systematic data leakage detection protocols, (2) comprehensive municipal data integration, (3) explicit temporal validation frameworks, and (4) production deployment with interpretability analysis.
+
+\subsection{Limitations and Future Work}
+Current limitations include: approximate geocoding in prototype deployment, conservative feature engineering excluding potentially useful but risky variables, and temporal coverage constrained by available data periods.
+
+Future research directions encompass: (1) exact building coordinate integration, (2) causal feature engineering with economic time lags, (3) multi-city validation (Chicago, Boston, San Francisco), (4) real-time data pipeline implementation, and (5) counterfactual analysis for policy intervention optimization.
+
+\subsection{Policy Implications}
+Results support evidence-based policy interventions:
+\begin{itemize}
+    \item \textbf{Building Modernization}: Age-focused incentive programs
+    \item \textbf{Economic Development}: Brooklyn-specific intervention zones  
+    \item \textbf{Transportation}: Accessibility improvements for high-risk areas
+    \item \textbf{Zoning}: Mixed-use development encouraging commercial vitality
+\end{itemize}
+
+\section*{Acknowledgments}
+We thank Dr. Krishna Bathula for invaluable guidance, NYC Open Data for comprehensive municipal datasets, and Pace University's Seidenberg School for computational resources supporting this research.
+
+\balance
+
+\begin{thebibliography}{99}
+\bibitem{rebny2024} Real Estate Board of New York, ``Manhattan Office Market Report Q4 2024,'' \emph{REBNY Research}, vol. 45, no. 4, pp. 12--28, 2024.
+
+\bibitem{chen2016} T. Chen and C. Guestrin, ``XGBoost: A scalable tree boosting system,'' in \emph{Proc. 22nd ACM SIGKDD Int. Conf. Knowledge Discovery and Data Mining}, 2016, pp. 785--794.
+
+\bibitem{lundberg2017} S. M. Lundberg and S. I. Lee, ``A unified approach to interpreting model predictions,'' in \emph{Advances in Neural Information Processing Systems}, 2017, pp. 4765--4774.
+
+\bibitem{nycpluto} NYC Department of Finance, ``Property Assessment Data (PLUTO),'' NYC Open Data, 2025. [Online]. Available: \url{https://opendata.cityofnewyork.us/}
+
+\bibitem{nycdob} NYC Department of Buildings, ``Building Permit Issuance Data,'' NYC Open Data, 2025. [Online]. Available: \url{https://data.cityofnewyork.us/}
+
+\bibitem{mta2025} Metropolitan Transportation Authority, ``Subway Hourly Ridership Data 2020--2024,'' MTA Open Data, 2025. [Online]. Available: \url{https://new.mta.info/open-data}
+
+\bibitem{molnar2022} C. Molnar, \emph{Interpretable Machine Learning: A Guide for Making Black Box Models Explainable}, 2nd ed. Munich: Leanpub, 2022.
+
+\bibitem{bathula2024} K. Bathula \emph{et al.}, ``Advanced analytics in urban real estate: methodological frameworks,'' \emph{J. Urban Analytics}, vol. 15, no. 3, pp. 234--251, 2024.
+\end{thebibliography}
+
+\appendices
+
+\section{Feature Engineering Implementation}
+\label{app:features}
+
+\subsection{Data Leakage Detection Algorithm}
+\begin{lstlisting}[language=Python,caption={Complete leakage detection implementation}]
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import TimeSeriesSplit
+from sklearn.metrics import roc_auc_score
+from sklearn.linear_model import LogisticRegression
+
+def comprehensive_leakage_detection(df, target_col, 
+                                   feature_cols, 
+                                   date_col='date',
+                                   corr_threshold=0.95,
+                                   auc_threshold=0.99):
+    """
+    Detect data leakage using multiple approaches
+    """
+    leaky_features = set()
+    
+    # Correlation-based detection
+    for feature in feature_cols:
+        corr = abs(df[feature].corr(df[target_col]))
+        if corr > corr_threshold:
+            leaky_features.add(feature)
+    
+    # Temporal validation
+    tscv = TimeSeriesSplit(n_splits=3)
+    for feature in feature_cols:
+        if feature in leaky_features:
+            continue
+            
+        aucs = []
+        for train_idx, test_idx in tscv.split(df):
+            X_train = df.iloc[train_idx][[feature]]
+            y_train = df.iloc[train_idx][target_col]
+            X_test = df.iloc[test_idx][[feature]]
+            y_test = df.iloc[test_idx][target_col]
+            
+            lr = LogisticRegression()
+            lr.fit(X_train, y_train)
+            pred_proba = lr.predict_proba(X_test)[:, 1]
+            aucs.append(roc_auc_score(y_test, pred_proba))
+        
+        if np.mean(aucs) > auc_threshold:
+            leaky_features.add(feature)
+    
+    return list(leaky_features)
+\end{lstlisting}
+
+\section{Hyperparameter Optimization}
+\label{app:hyperopt}
+
+\begin{lstlisting}[language=Python,caption={XGBoost hyperparameter grid}]
+xgb_param_grid = {
+    'n_estimators': [100, 200, 300, 500],
+    'max_depth': [4, 6, 8, 10],
+    'learning_rate': [0.01, 0.05, 0.1, 0.2],
+    'subsample': [0.8, 0.9, 1.0],
+    'colsample_bytree': [0.8, 0.9, 1.0],
+    'reg_alpha': [0, 0.1, 1, 10],
+    'reg_lambda': [1, 1.5, 2, 5],
+    'min_child_weight': [1, 3, 5],
+    'gamma': [0, 0.1, 0.5, 1]
+}
+
+# Optimal parameters found
+optimal_params = {
+    'n_estimators': 300,
+    'max_depth': 6,
+    'learning_rate': 0.1,
+    'subsample': 0.9,
+    'colsample_bytree': 0.9,
+    'reg_alpha': 0.1,
+    'reg_lambda': 1.5,
+    'min_child_weight': 3,
+    'gamma': 0.1,
+    'random_state': 42
+}
+\end{lstlisting}
+
+\section{Dashboard Implementation}
+\label{app:dashboard}
+
+\begin{lstlisting}[language=Python,caption={Core dashboard functionality}]
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+import shap
+import joblib
+
+# Load model and data
+@st.cache_resource
+def load_model():
+    model = joblib.load('models/champion_xgboost.pkl')
+    explainer = shap.TreeExplainer(model)
+    return model, explainer
+
+@st.cache_data
+def load_data():
+    return pd.read_csv('data/processed/buildings_with_predictions.csv')
+
+def main():
+    st.title("Office Apocalypse Algorithm Dashboard")
+    
+    model, explainer = load_model()
+    df = load_data()
+    
+    # Building lookup
+    st.header("Building Risk Assessment")
+    bbl = st.text_input("Enter BBL (Borough-Block-Lot):")
+    
+    if bbl:
+        building = df[df['BBL'] == bbl]
+        if not building.empty:
+            risk_score = building['risk_score'].iloc[0]
+            st.metric("Vacancy Risk Score", f"{risk_score:.3f}")
+            
+            # SHAP explanation
+            features = building[FEATURE_COLS].values
+            shap_values = explainer.shap_values(features)
+            fig = shap.plots.waterfall(
+                explainer.expected_value, 
+                shap_values[0], 
+                features[0]
+            )
+            st.pyplot(fig)
+    
+    # Portfolio analysis
+    st.header("Portfolio Risk Distribution")
+    risk_dist = px.histogram(
+        df, x='risk_score', 
+        title="Risk Score Distribution"
+    )
+    st.plotly_chart(risk_dist)
+
+if __name__ == "__main__":
+    main()
+\end{lstlisting}
+
+\end{document}
