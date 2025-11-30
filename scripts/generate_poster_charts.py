@@ -79,11 +79,11 @@ def create_chart2_data_sources():
     plt.close()
 
 def create_chart3_system_architecture():
-    """Chart 3: System Architecture Diagram - Flowchart"""
-    fig, ax = plt.subplots(figsize=(14, 8))
+    """Chart 3: System Architecture Diagram - Flowchart with enhanced clarity"""
+    fig, ax = plt.subplots(figsize=(16, 10), dpi=300)
     ax.axis('off')
     
-    # Define boxes
+    # Define boxes with PACE colors
     boxes = [
         # Data Sources
         {'text': '6 Data Sources\n(PLUTO, ACRIS, DOB,\nMTA, Business, Storefront)', 
@@ -112,10 +112,11 @@ def create_chart3_system_architecture():
     
     for box in boxes:
         rect = plt.Rectangle(box['xy'], box['width'], 0.15, 
-                           facecolor=box['color'], edgecolor='black', linewidth=2)
+                           facecolor=box['color'], edgecolor='black', linewidth=3)
         ax.add_patch(rect)
         ax.text(box['xy'][0] + box['width']/2, box['xy'][1] + 0.075, 
-               box['text'], ha='center', va='center', fontsize=11, weight='bold')
+               box['text'], ha='center', va='center', fontsize=14, weight='bold', 
+               fontfamily='sans-serif')
     
     # Add arrows
     arrows = [
@@ -128,14 +129,16 @@ def create_chart3_system_architecture():
     
     for start, end in arrows:
         ax.annotate('', xy=end, xytext=start,
-                   arrowprops=dict(arrowstyle='->', lw=3, color=PACE_BLUE))
+                   arrowprops=dict(arrowstyle='->', lw=4, color=PACE_BLUE, 
+                                 connectionstyle='arc3,rad=0'))
     
     ax.set_xlim(0, 1)
     ax.set_ylim(0.2, 1)
     plt.title('System Architecture: End-to-End ML Pipeline', 
-             fontsize=18, weight='bold', pad=20)
+             fontsize=22, weight='bold', pad=20, fontfamily='sans-serif')
     plt.tight_layout()
-    plt.savefig(output_dir / 'chart3_system_architecture.png', dpi=300, bbox_inches='tight')
+    plt.savefig(output_dir / 'chart3_system_architecture.png', dpi=400, bbox_inches='tight', 
+                facecolor='white', edgecolor='none')
     print("✅ Chart 3 saved: System Architecture Diagram")
     plt.close()
 
