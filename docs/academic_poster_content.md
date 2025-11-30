@@ -128,56 +128,27 @@ Final Clean Features (20 total):
 
 ## RESULTS AND ANALYSIS
 
-**Champion Model Performance (XGBoost):**
-| Metric | Value | Business Impact |
-|--------|--------|-----------------|
-| **ROC-AUC** | **92.41%** | Excellent discrimination capability |
-| **Precision@10%** | **93.01%** | 93% accuracy targeting highest-risk buildings |
-| **Precision@5%** | 95.12% | Exceptional accuracy for critical interventions |
-| **F1-Score** | 0.847 | Balanced precision and recall |
+**[CHART 8: Performance Metrics Dashboard]**
+*Comprehensive metrics visual showing: ROC-AUC 92.41%, Precision@10% 93.01%, Precision@5% 95.12%, 85% cost reduction, 3.1× efficiency, 7,191 buildings analyzed, with model comparison bar chart*
 
-**Model Comparison Results:**
-```
-Algorithm         ROC-AUC    Training Time    Business Value
-XGBoost          92.41%     2.3 min         Champion Model
-Random Forest    92.08%     1.8 min         Strong Baseline  
-Logistic Reg.    88.20%     0.5 min         Interpretable Baseline
-```
+**Key Findings:**
 
-**[CHART 4: Model Performance Comparison]**
-*Horizontal bar chart comparing ROC-AUC scores: XGBoost (92.41%), Random Forest (92.08%), Logistic Regression (88.20%)*
+**1. Champion Model Performance (XGBoost):**
+- **92.41% ROC-AUC:** Excellent discrimination capability
+- **93.01% Precision@10%:** Targeting highest-risk buildings with 93% accuracy
+- **85% Cost Reduction:** $3.6M vs $5M for equivalent coverage
 
-**Feature Importance (SHAP Analysis):**
-| Rank | Feature | Impact | Interpretation |
-|------|---------|--------|----------------|
-| 1 | `building_age` | 1.406 | Older buildings (>50 years) exponentially higher risk |
-| 2 | `construction_activity_proxy` | 1.149 | Market development activity predictor |
-| 3 | `officearea` | 0.776 | Building size affects attractiveness |
-| 4 | `office_ratio` | 0.667 | Space utilization efficiency |
-
+**2. Feature Importance (SHAP Analysis):**
 **[CHART 5: SHAP Feature Importance Plot]**
-*Waterfall plot showing top 5 features with building_age (1.406) dominating, followed by construction_activity_proxy (1.149)*
+*Top predictors: building_age (1.406), construction_activity_proxy (1.149), officearea (0.776), office_ratio (0.667)*
 
-**Geographic Risk Analysis:**
-```
-Borough Risk Distribution:
-Brooklyn    40.9% high-risk (highest)    1,776 buildings
-Queens      32.9% high-risk             1,619 buildings  
-Bronx       27.9% high-risk               584 buildings
-Staten Is.  25.5% high-risk               705 buildings
-Manhattan   22.1% high-risk (lowest)    2,507 buildings
-```
-
+**3. Geographic Risk Distribution:**
 **[CHART 6: NYC Borough Risk Heat Map]**
-*Color-coded bar chart: Brooklyn (RED - 40.9%), Queens (ORANGE - 32.9%), Bronx (YELLOW - 27.9%), Staten Island (LIGHT GREEN - 25.5%), Manhattan (GREEN - 22.1%)*
+*Brooklyn highest risk (40.9%), Manhattan lowest (22.1%). Brooklyn and Queens require prioritized intervention strategies.*
 
-**Business Value Quantification:**
-- **Random Targeting:** 30% success rate, $5M for 300 interventions
-- **Model Targeting:** 93% success rate, $3.6M for 669 interventions  
-- **ROI Improvement:** 85% cost reduction + 123% more successful outcomes
-
-**[CHART 7: Business Impact Visualization]**
-*Side-by-side comparison bars showing Random (30% success, $5M cost) vs Model-Driven (93% success, $3.6M cost) with "85% Cost Reduction" annotation*
+**4. Business Impact:**
+**[CHART 7: Business Impact Comparison]**
+*Model-driven approach achieves 93% success rate vs 30% random targeting, with 85% cost reduction and 3.1× efficiency improvement*
 
 ---
 

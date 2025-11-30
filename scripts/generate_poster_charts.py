@@ -274,6 +274,94 @@ def create_chart7_business_impact():
     print("✅ Chart 7 saved: Business Impact Comparison")
     plt.close()
 
+def create_chart8_metrics_dashboard():
+    """Chart 8: Performance Metrics Dashboard - Compact visual replacing tables"""
+    fig = plt.figure(figsize=(12, 8), dpi=300, facecolor='white')
+    ax = fig.add_subplot(111)
+    ax.axis('off')
+    
+    # Main champion metric - center
+    ax.text(0.5, 0.75, '92.41%', ha='center', va='center', 
+            fontsize=80, weight='bold', color=PACE_BLUE, fontfamily='sans-serif')
+    ax.text(0.5, 0.65, 'ROC-AUC Score', ha='center', va='center', 
+            fontsize=24, weight='bold', color=PACE_NAVY, fontfamily='sans-serif')
+    ax.text(0.5, 0.60, 'XGBoost Champion Model', ha='center', va='center', 
+            fontsize=16, color='#555555', fontfamily='sans-serif')
+    
+    # Key metrics - top row
+    metrics_top = [
+        {'value': '93.01%', 'label': 'Precision@10%', 'sublabel': 'Targeting Accuracy', 'x': 0.25},
+        {'value': '95.12%', 'label': 'Precision@5%', 'sublabel': 'Critical Interventions', 'x': 0.75},
+    ]
+    
+    for metric in metrics_top:
+        # Box background
+        rect = plt.Rectangle((metric['x']-0.12, 0.82), 0.24, 0.15, 
+                           facecolor='#F8F9FA', edgecolor=PACE_BLUE, linewidth=3, 
+                           transform=ax.transAxes, zorder=1)
+        ax.add_patch(rect)
+        
+        ax.text(metric['x'], 0.92, metric['value'], ha='center', va='center', 
+                fontsize=32, weight='bold', color=PACE_BLUE, fontfamily='sans-serif',
+                transform=ax.transAxes)
+        ax.text(metric['x'], 0.86, metric['label'], ha='center', va='center', 
+                fontsize=14, weight='bold', color=PACE_NAVY, fontfamily='sans-serif',
+                transform=ax.transAxes)
+        ax.text(metric['x'], 0.83, metric['sublabel'], ha='center', va='center', 
+                fontsize=10, color='#555555', fontfamily='sans-serif',
+                transform=ax.transAxes)
+    
+    # Bottom metrics - business impact
+    metrics_bottom = [
+        {'value': '85%', 'label': 'Cost Reduction', 'icon': '💰', 'x': 0.2},
+        {'value': '3.1×', 'label': 'Efficiency Gain', 'icon': '⚡', 'x': 0.5},
+        {'value': '7,191', 'label': 'Buildings Analyzed', 'icon': '🏢', 'x': 0.8},
+    ]
+    
+    for metric in metrics_bottom:
+        # Box background with gold accent
+        rect = plt.Rectangle((metric['x']-0.1, 0.35), 0.2, 0.15, 
+                           facecolor=PACE_GOLD, edgecolor=PACE_NAVY, linewidth=2, 
+                           alpha=0.3, transform=ax.transAxes, zorder=1)
+        ax.add_patch(rect)
+        
+        ax.text(metric['x'], 0.47, metric['icon'], ha='center', va='center', 
+                fontsize=28, transform=ax.transAxes)
+        ax.text(metric['x'], 0.41, metric['value'], ha='center', va='center', 
+                fontsize=28, weight='bold', color=PACE_NAVY, fontfamily='sans-serif',
+                transform=ax.transAxes)
+        ax.text(metric['x'], 0.37, metric['label'], ha='center', va='center', 
+                fontsize=12, weight='bold', color=PACE_BLUE, fontfamily='sans-serif',
+                transform=ax.transAxes)
+    
+    # Model comparison mini-chart
+    ax_mini = fig.add_axes([0.15, 0.05, 0.7, 0.20])
+    models = ['XGBoost', 'Random Forest', 'Logistic Reg.']
+    scores = [92.41, 92.08, 88.20]
+    colors = [PACE_NAVY, PACE_BLUE, PACE_BLUE_LIGHT]
+    
+    bars = ax_mini.barh(models, scores, color=colors, edgecolor='black', linewidth=1.5)
+    for bar, score in zip(bars, scores):
+        width = bar.get_width()
+        ax_mini.text(width + 0.5, bar.get_y() + bar.get_height()/2, 
+                    f'{score}%', ha='left', va='center', fontsize=12, weight='bold')
+    
+    ax_mini.set_xlim(85, 96)
+    ax_mini.set_xlabel('ROC-AUC Score (%)', fontsize=11, weight='bold')
+    ax_mini.set_title('Model Comparison', fontsize=13, weight='bold', color=PACE_NAVY)
+    ax_mini.spines['top'].set_visible(False)
+    ax_mini.spines['right'].set_visible(False)
+    ax_mini.grid(axis='x', alpha=0.3, linestyle='--')
+    
+    # Title
+    fig.text(0.5, 0.97, 'Performance Metrics Dashboard', ha='center', va='top',
+            fontsize=26, weight='bold', color=PACE_NAVY, fontfamily='sans-serif')
+    
+    plt.savefig(output_dir / 'chart8_metrics_dashboard.png', dpi=300, bbox_inches='tight',
+                facecolor='white', edgecolor='none')
+    print("✅ Chart 8 saved: Performance Metrics Dashboard")
+    plt.close()
+
 def main():
     """Generate all poster charts"""
     print("\n" + "="*60)
@@ -291,9 +379,10 @@ def main():
     create_chart5_shap_importance()
     create_chart6_borough_risk()
     create_chart7_business_impact()
+    create_chart8_metrics_dashboard()
     
     print("\n" + "="*60)
-    print("✅ ALL 7 CHARTS GENERATED SUCCESSFULLY!")
+    print("✅ ALL 8 CHARTS GENERATED SUCCESSFULLY!")
     print("="*60)
     print(f"\nCharts saved to: {output_dir.absolute()}")
     print("\nNext Steps:")
