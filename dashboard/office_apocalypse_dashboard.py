@@ -776,21 +776,21 @@ def main():
     st.markdown("---")
     st.markdown("""
     <div class="footer">
-        <h3 style="color: #667eea; margin-bottom: 1rem;">Office Apocalypse Algorithm</h3>
-        <p style="margin: 0.5rem 0;">
+        <h3 style="color: #003C7D; margin-bottom: 1rem; font-weight: 700;">Office Apocalypse Algorithm</h3>
+        <p style="margin: 0.5rem 0; color: #002855; font-size: 1rem;">
             <strong>Team:</strong> Ibrahim Denis Fofanah (Lead), Bright Arowny Zaman, Jeevan Hemanth Yendluri
         </p>
-        <p style="margin: 0.5rem 0;">
+        <p style="margin: 0.5rem 0; color: #002855; font-size: 1rem;">
             <strong>Institution:</strong> PACE University | <strong>Advisor:</strong> Dr. Krishna Bathula
         </p>
-        <p style="margin: 0.5rem 0;">
+        <p style="margin: 0.5rem 0; color: #002855; font-size: 1rem;">
             Data Science Capstone Project | Fall 2025
         </p>
-        <p style="margin-top: 1rem; font-size: 0.85rem; color: #adb5bd;">
+        <p style="margin-top: 1rem; font-size: 0.95rem; color: #495057; font-weight: 500;">
             © 2025 Office Apocalypse Algorithm Team | All Rights Reserved
         </p>
-        <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #adb5bd;">
-            🔗 <a href="https://github.com/Denis060/capstone_office-apocalypse-algorithm" target="_blank" style="color: #667eea;">GitHub Repository</a>
+        <p style="margin-top: 0.5rem; font-size: 0.95rem;">
+            🔗 <a href="https://github.com/Denis060/capstone_office-apocalypse-algorithm" target="_blank" style="color: #003C7D; font-weight: 600; text-decoration: none;">GitHub Repository</a>
         </p>
     </div>
     """, unsafe_allow_html=True)
