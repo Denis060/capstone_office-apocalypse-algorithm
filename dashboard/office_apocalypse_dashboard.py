@@ -4,8 +4,8 @@ Office Apocalypse Algorithm - Interactive Dashboard
 Streamlit web application for vacancy risk prediction
 
 Champion Model: XGBoost (92.41% ROC-AUC)
-Version: 1.5 (Bulletproof string-to-float conversion)
-Build: 20251201-final
+Version: 2.0 (Simplified feature display - SHAP removed for stability)
+Build: 20251201-stable
 """
 
 import streamlit as st
@@ -965,37 +965,26 @@ def building_lookup_page(df, model, feature_names):
             if 'value_per_sqft' in building.index:
                 st.metric("Value per Sq Ft", f"${building['value_per_sqft']:.0f}")
         
-        # SHAP explanation
-        st.subheader("Prediction Explanation")
-        try:
-            # Ensure building_features are clean floats
-            clean_features = np.array([float(x) if not (pd.isna(x) or np.isinf(x)) else 0.0 
-                                      for x in building_features[0]], dtype=np.float64).reshape(1, -1)
-            
-            explainer = shap.TreeExplainer(model)
-            shap_values = explainer.shap_values(clean_features)
-            
-            fig = create_feature_importance_plot(shap_values, feature_names, clean_features[0])
-            st.pyplot(fig)
-            
-            st.markdown("""
-            <div style="background: white; 
-                        padding: 1.2rem; 
-                        border-radius: 0.8rem; 
-                        border: 2px solid #003C7D;
-                        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-                        margin-top: 1rem;">
-                <h5 style="color: #003C7D; margin-top: 0;">📖 How to Read This Chart:</h5>
-                <ul style="line-height: 2; font-size: 0.95rem; color: #2c3e50;">
-                    <li><span style="color: #dc3545; font-weight: bold;">Red bars</span> push the prediction toward <strong>HIGH risk</strong></li>
-                    <li><span style="color: #0052A5; font-weight: bold;">Blue bars</span> push the prediction toward <strong>LOW risk</strong></li>
-                    <li><strong>Longer bars</strong> = stronger influence on the prediction</li>
-                    <li><strong>Numbers</strong> show the actual feature values for this building</li>
-                </ul>
-            </div>
-            """, unsafe_allow_html=True)
-        except Exception as e:
-            st.warning(f"Could not generate explanation: {e}")
+        # Feature Summary
+        st.subheader("Key Building Features")
+        
+        # Display top 10 features in a clean table format
+        feature_data = []
+        for i, fname in enumerate(feature_names[:10]):
+            try:
+                fval = building_features[0][i]
+                if not (pd.isna(fval) or np.isinf(fval)):
+                    feature_data.append({
+                        'Feature': fname.replace('_', ' ').title(),
+                        'Value': f"{float(fval):.2f}" if abs(float(fval)) < 1000 else f"{float(fval):,.0f}"
+                    })
+            except:
+                pass
+        
+        if feature_data:
+            st.dataframe(pd.DataFrame(feature_data), use_container_width=True, hide_index=True)
+        
+        st.info("💡 **Model Insight:** This building's risk prediction is based on 20 engineered features including building age, office area, construction activity, and market indicators. The XGBoost model achieved 92.41% ROC-AUC on validation data.")
     
     except Exception as e:
         st.error(f"Error making prediction: {e}")
