@@ -4,6 +4,7 @@ Office Apocalypse Algorithm - Interactive Dashboard
 Streamlit web application for vacancy risk prediction
 
 Champion Model: XGBoost (92.41% ROC-AUC)
+Version: 1.0
 """
 
 import streamlit as st
@@ -28,47 +29,314 @@ project_root = os.path.dirname(script_dir)  # Go up one level from dashboard to 
 
 # Page configuration
 st.set_page_config(
-    page_title="Office Apocalypse Algorithm",
+    page_title="Office Apocalypse Algorithm | PACE University",
     page_icon="🏢",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="expanded",
+    menu_items={
+        'About': "Office Apocalypse Algorithm - NYC Building Vacancy Risk Prediction\n\nTeam: Ibrahim Denis Fofanah, Bright Arowny Zaman, Jeevan Hemanth Yendluri\nAdvisor: Dr. Krishna Bathula"
+    }
 )
 
-# Custom CSS
+# Custom CSS - PACE University Blue Theme
 st.markdown("""
 <style>
+    /* Import Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Montserrat:wght@700;800&display=swap');
+    
+    /* PACE University Official Colors */
+    :root {
+        --pace-blue: #003C7D;
+        --pace-blue-light: #0052A5;
+        --pace-gold: #FFB81C;
+        --pace-navy: #002855;
+    }
+    
+    /* Global Styles */
+    html, body, [class*="css"] {
+        font-family: 'Inter', sans-serif;
+        background-color: #f8f9fa;
+    }
+    
+    /* Main Header with PACE Blue */
     .main-header {
-        font-size: 2.5rem;
-        color: #1f77b4;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 3.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #003C7D 0%, #0052A5 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
         text-align: center;
+        margin-bottom: 0.5rem;
+        animation: fadeInDown 1s ease-in;
+    }
+    
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Subtitle */
+    .subtitle {
+        text-align: center;
+        font-size: 1.3rem;
+        color: #002855;
         margin-bottom: 2rem;
+        font-weight: 500;
+        line-height: 1.6;
     }
-    .metric-container {
-        background-color: #f0f2f6;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        border: 1px solid #e6e9ef;
-    }
-    .high-risk {
-        color: #ff4444;
-        font-weight: bold;
-    }
-    .medium-risk {
-        color: #ffaa00;
-        font-weight: bold;
-    }
-    .low-risk {
-        color: #44ff44;
-        font-weight: bold;
-    }
+    
+    /* Champion Badge - Gold PACE Colors */
     .champion-badge {
-        background: linear-gradient(90deg, #FFD700, #FFA500);
-        color: #000;
-        padding: 0.5rem 1rem;
-        border-radius: 1rem;
-        font-weight: bold;
+        background: linear-gradient(135deg, #FFB81C 0%, #FFA500 100%);
+        color: #003C7D;
+        padding: 0.8rem 2rem;
+        border-radius: 2rem;
+        font-weight: 800;
+        font-size: 1.1rem;
         display: inline-block;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 20px rgba(255, 184, 28, 0.5);
+        border: 3px solid #003C7D;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        animation: pulse 2.5s infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); box-shadow: 0 8px 20px rgba(255, 184, 28, 0.5); }
+        50% { transform: scale(1.05); box-shadow: 0 12px 30px rgba(255, 184, 28, 0.7); }
+    }
+    
+    /* Team Badge - PACE Blue */
+    .team-badge {
+        background: linear-gradient(135deg, #003C7D 0%, #0052A5 100%);
+        color: white;
+        padding: 0.6rem 1.5rem;
+        border-radius: 1.5rem;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: inline-block;
+        margin: 0.5rem;
+        box-shadow: 0 4px 10px rgba(0, 60, 125, 0.3);
+        transition: all 0.3s ease;
+    }
+    
+    .team-badge:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 15px rgba(0, 60, 125, 0.5);
+    }
+    
+    /* Enhanced Metric Containers */
+    .metric-container {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        padding: 1.5rem;
+        border-radius: 1rem;
+        border: 2px solid #003C7D;
+        box-shadow: 0 4px 15px rgba(0, 60, 125, 0.15);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .metric-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 60, 125, 0.25);
+    }
+    
+    /* Risk Level Styling */
+    .high-risk {
+        color: #dc3545;
+        font-weight: 700;
+        font-size: 1.4rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        text-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
+    }
+    
+    .medium-risk {
+        color: #FFB81C;
+        font-weight: 700;
+        font-size: 1.4rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        text-shadow: 0 2px 4px rgba(255, 184, 28, 0.3);
+    }
+    
+    .low-risk {
+        color: #28a745;
+        font-weight: 700;
+        font-size: 1.4rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        text-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+    }
+    
+    /* Sidebar Styling - PACE Blue Gradient */
+    [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #003C7D 0%, #002855 100%);
+        color: white;
+    }
+    
+    [data-testid="stSidebar"] * {
+        color: white !important;
+    }
+    
+    [data-testid="stSidebar"] .stSelectbox label {
+        color: white !important;
+    }
+    
+    /* Info Boxes */
+    .stAlert {
+        border-radius: 1rem;
+        border-left: 5px solid #003C7D;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        background-color: white !important;
+        color: #2c3e50 !important;
+    }
+    
+    .stAlert p, .stAlert li, .stAlert span {
+        color: #2c3e50 !important;
+        font-size: 1rem !important;
+    }
+    
+    /* Buttons - PACE Blue */
+    .stButton > button {
+        background: linear-gradient(135deg, #003C7D 0%, #0052A5 100%);
+        color: white;
+        border-radius: 0.8rem;
+        padding: 0.7rem 2.5rem;
+        font-weight: 700;
+        border: 2px solid #FFB81C;
+        box-shadow: 0 4px 15px rgba(0, 60, 125, 0.4);
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .stButton > button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 60, 125, 0.6);
+        border-color: #003C7D;
+    }
+    
+    /* Download Button - Gold Accent */
+    .stDownloadButton > button {
+        background: linear-gradient(135deg, #FFB81C 0%, #FFA500 100%);
+        color: #003C7D;
+        border-radius: 0.8rem;
+        padding: 0.7rem 2.5rem;
+        font-weight: 700;
+        border: 2px solid #003C7D;
+        box-shadow: 0 4px 15px rgba(255, 184, 28, 0.4);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .stDownloadButton > button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(255, 184, 28, 0.6);
+    }
+    
+    /* Section Headers - PACE Blue */
+    h2, h3 {
+        color: #003C7D;
+        font-weight: 700;
+        margin-top: 2rem;
         margin-bottom: 1rem;
+    }
+    
+    /* Data Tables */
+    .dataframe {
+        border-radius: 0.8rem;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        border: 2px solid #003C7D;
+        font-size: 0.95rem !important;
+    }
+    
+    .dataframe thead tr th {
+        background-color: #003C7D !important;
+        color: white !important;
+        font-weight: 700 !important;
+        font-size: 1rem !important;
+        padding: 0.8rem !important;
+    }
+    
+    .dataframe tbody tr td {
+        color: #2c3e50 !important;
+        padding: 0.6rem !important;
+        font-size: 0.95rem !important;
+    }
+    
+    .dataframe tbody tr:nth-of-type(even) {
+        background-color: #f8f9fa !important;
+    }
+    
+    .dataframe tbody tr:hover {
+        background-color: #e3f2fd !important;
+    }
+    
+    /* Metrics - PACE Blue */
+    [data-testid="stMetricValue"] {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #003C7D;
+    }
+    
+    [data-testid="stMetricDelta"] {
+        font-weight: 600;
+    }
+    
+    /* Selectbox and Slider */
+    .stSelectbox, .stSlider {
+        border-radius: 0.8rem;
+    }
+    
+    /* Footer - PACE Branded */
+    .footer {
+        text-align: center;
+        padding: 2.5rem;
+        margin-top: 3rem;
+        border-top: 3px solid #003C7D;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 1rem;
+    }
+    
+    .footer h3 {
+        color: #003C7D;
+        margin-bottom: 1rem;
+    }
+    
+    .footer a {
+        color: #003C7D;
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    
+    .footer a:hover {
+        color: #FFB81C;
+    }
+    
+    /* Spinner - PACE Blue */
+    .stSpinner > div {
+        border-top-color: #003C7D !important;
+    }
+    
+    /* Progress Bar - PACE Colors */
+    .stProgress > div > div {
+        background-color: #003C7D;
+    }
+    
+    /* Success/Info Messages */
+    .stSuccess {
+        background-color: rgba(0, 60, 125, 0.1);
+        border-left-color: #003C7D;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -128,29 +396,46 @@ def get_risk_category(probability):
         return "🟢 LOW", "low-risk"
 
 def create_risk_gauge(probability):
-    """Create a risk gauge chart."""
+    """Create a professional risk gauge chart."""
     fig = go.Figure(go.Indicator(
         mode = "gauge+number+delta",
         value = probability * 100,
         domain = {'x': [0, 1], 'y': [0, 1]},
-        title = {'text': "Vacancy Risk Score"},
-        delta = {'reference': 50},
+        title = {
+            'text': "Vacancy Risk Score",
+            'font': {'size': 24, 'color': '#2c3e50', 'family': 'Inter'}
+        },
+        delta = {'reference': 50, 'increasing': {'color': "#dc3545"}, 'decreasing': {'color': "#28a745"}},
+        number = {'suffix': "%", 'font': {'size': 48, 'color': '#003C7D', 'family': 'Montserrat'}},
         gauge = {
-            'axis': {'range': [None, 100]},
-            'bar': {'color': "darkblue"},
+            'axis': {
+                'range': [None, 100],
+                'tickwidth': 2,
+                'tickcolor': "#003C7D"
+            },
+            'bar': {'color': "#003C7D", 'thickness': 0.75},
+            'bgcolor': "white",
+            'borderwidth': 2,
+            'bordercolor': "#e9ecef",
             'steps': [
-                {'range': [0, 40], 'color': "lightgreen"},
-                {'range': [40, 70], 'color': "yellow"},
-                {'range': [70, 100], 'color': "red"}
+                {'range': [0, 40], 'color': "#d4edda"},
+                {'range': [40, 70], 'color': "#fff3cd"},
+                {'range': [70, 100], 'color': "#f8d7da"}
             ],
             'threshold': {
-                'line': {'color': "red", 'width': 4},
-                'thickness': 0.75,
+                'line': {'color': "#dc3545", 'width': 4},
+                'thickness': 0.85,
                 'value': 70
             }
         }
     ))
-    fig.update_layout(height=300)
+    fig.update_layout(
+        height=350,
+        font={'family': 'Inter'},
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        margin=dict(l=20, r=20, t=60, b=20)
+    )
     return fig
 
 def create_feature_importance_plot(shap_values, feature_names, building_data):
@@ -191,28 +476,71 @@ def create_feature_importance_plot(shap_values, feature_names, building_data):
     return fig
 
 def create_risk_distribution_plot(df, predictions):
-    """Create risk distribution visualization."""
+    """Create professional risk distribution visualization."""
     risk_df = pd.DataFrame({
         'Probability': predictions,
         'Borough': df['borough'] if 'borough' in df.columns else 'Unknown'
     })
     
+    # PACE University color palette
+    colors = {
+        'Manhattan': '#003C7D',
+        'Brooklyn': '#0052A5',
+        'Queens': '#FFB81C',
+        'Bronx': '#002855',
+        'Staten Island': '#6699CC'
+    }
+    
     fig = px.histogram(
         risk_df, 
         x='Probability', 
         color='Borough',
-        title='Vacancy Risk Distribution Across NYC',
-        nbins=30,
-        labels={'Probability': 'Vacancy Risk Probability', 'count': 'Number of Buildings'}
+        title='<b>Vacancy Risk Distribution Across NYC Boroughs</b>',
+        nbins=40,
+        labels={'Probability': 'Vacancy Risk Probability', 'count': 'Number of Buildings'},
+        color_discrete_map=colors,
+        barmode='stack'
     )
     
-    # Add risk threshold lines
-    fig.add_vline(x=0.4, line_dash="dash", line_color="orange", 
-                  annotation_text="Medium Risk Threshold")
-    fig.add_vline(x=0.7, line_dash="dash", line_color="red", 
-                  annotation_text="High Risk Threshold")
+    # Add risk threshold lines with annotations
+    fig.add_vline(
+        x=0.4, 
+        line_dash="dash", 
+        line_color="#ffc107", 
+        line_width=3,
+        annotation_text="Medium Risk", 
+        annotation_position="top",
+        annotation_font_color="#ffc107",
+        annotation_font_size=14
+    )
+    fig.add_vline(
+        x=0.7, 
+        line_dash="dash", 
+        line_color="#dc3545", 
+        line_width=3,
+        annotation_text="High Risk", 
+        annotation_position="top",
+        annotation_font_color="#dc3545",
+        annotation_font_size=14
+    )
     
-    fig.update_layout(height=400)
+    fig.update_layout(
+        height=450,
+        font={'family': 'Inter', 'size': 12},
+        title_font_size=20,
+        title_font_color='#2c3e50',
+        paper_bgcolor='rgba(248, 249, 250, 0.5)',
+        plot_bgcolor='white',
+        hovermode='x unified',
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1
+        )
+    )
+    
     return fig
 
 def create_geographic_risk_map(df, predictions):
@@ -253,11 +581,11 @@ def create_geographic_risk_map(df, predictions):
                     zoom=9,
                     height=600,
                     color_discrete_map={
-                        'Manhattan': '#FF6B6B',
-                        'Brooklyn': '#4ECDC4', 
-                        'Queens': '#45B7D1',
-                        'Bronx': '#96CEB4',
-                        'Staten Island': '#FFEAA7'
+                        'Manhattan': '#003C7D',
+                        'Brooklyn': '#0052A5', 
+                        'Queens': '#FFB81C',
+                        'Bronx': '#002855',
+                        'Staten Island': '#6699CC'
                     }
                 )
             else:
@@ -283,12 +611,64 @@ def create_geographic_risk_map(df, predictions):
 def main():
     """Main dashboard application."""
     
-    # Header
+    # Stunning Header with Animation
     st.markdown('<h1 class="main-header">🏢 Office Apocalypse Algorithm</h1>', unsafe_allow_html=True)
-    st.markdown('<div class="champion-badge">🏆 Champion Model: XGBoost (92.41% ROC-AUC)</div>', unsafe_allow_html=True)
+    st.markdown('<p class="subtitle">AI-Powered NYC Office Building Vacancy Risk Prediction System</p>', unsafe_allow_html=True)
+    
+    # Champion Badge with Animation
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.markdown(
+            '<div style="text-align: center;"><div class="champion-badge">🏆 Champion Model: XGBoost | 92.41% ROC-AUC | 93.01% Precision@10%</div></div>', 
+            unsafe_allow_html=True
+        )
+    
+    # Team Information
+    st.markdown("""
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <span class="team-badge">👨‍🎓 Ibrahim Denis Fofanah (Lead)</span>
+        <span class="team-badge">👨‍🎓 Bright Arowny Zaman</span>
+        <span class="team-badge">👨‍🎓 Jeevan Hemanth Yendluri</span>
+        <br><br>
+        <span style="color: #003C7D; font-size: 1rem; font-weight: 600;">
+            📚 <strong>PACE University</strong> | Data Science Capstone Project | 
+            👨‍🏫 Advisor: Dr. Krishna Bathula | 📅 Fall 2025
+        </span>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Quick Stats Banner
+    st.markdown("""
+    <div style="background: linear-gradient(135deg, #003C7D 0%, #0052A5 100%); 
+                padding: 1.5rem; 
+                border-radius: 1rem; 
+                margin: 2rem 0;
+                box-shadow: 0 4px 15px rgba(0, 60, 125, 0.3);">
+        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; text-align: center;">
+            <div style="color: white; padding: 0.5rem;">
+                <h3 style="color: #FFB81C; margin: 0; font-size: 2rem; font-weight: 700;">7,191</h3>
+                <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">NYC Office Buildings</p>
+            </div>
+            <div style="color: white; padding: 0.5rem;">
+                <h3 style="color: #FFB81C; margin: 0; font-size: 2rem; font-weight: 700;">36</h3>
+                <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">Predictive Features</p>
+            </div>
+            <div style="color: white; padding: 0.5rem;">
+                <h3 style="color: #FFB81C; margin: 0; font-size: 2rem; font-weight: 700;">6</h3>
+                <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">Integrated Datasets</p>
+            </div>
+            <div style="color: white; padding: 0.5rem;">
+                <h3 style="color: #FFB81C; margin: 0; font-size: 2rem; font-weight: 700;">3.1×</h3>
+                <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">Efficiency Improvement</p>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("---")
     
     # Debug info (can be removed later)
-    with st.expander("🔧 Debug Info", expanded=False):
+    with st.expander("🔧 System Information", expanded=False):
         st.write(f"**Script Directory:** {script_dir}")
         st.write(f"**Project Root:** {project_root}")
         st.write(f"**Data Path:** {os.path.join(project_root, 'data', 'processed', 'office_buildings_clean.csv')}")
@@ -297,7 +677,7 @@ def main():
         st.write(f"**Model File Exists:** {os.path.exists(os.path.join(project_root, 'models', 'champion_xgboost.pkl'))}")
     
     # Load data and model
-    with st.spinner('Loading champion model and data...'):
+    with st.spinner('🔄 Loading champion model and data...'):
         df = load_data()
         model, feature_names = load_champion_model()
     
@@ -305,14 +685,65 @@ def main():
         st.error("Failed to load data or model. Please check file paths.")
         return
     
-    st.success(f"✅ Loaded {len(df):,} NYC office buildings and champion XGBoost model")
+    # Success message with style
+    st.success(f"✅ Successfully loaded {len(df):,} NYC office buildings and champion XGBoost model")
     
-    # Sidebar
-    st.sidebar.header("Navigation")
+    # Enhanced Sidebar
+    st.sidebar.markdown("""
+    <div style="text-align: center; padding: 1rem 0;">
+        <h2 style="color: white; margin: 0;">🧭 Navigation</h2>
+        <p style="color: rgba(255,255,255,0.8); font-size: 0.85rem; margin-top: 0.5rem;">
+            Select an analysis module
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
     page = st.sidebar.selectbox(
-        "Choose Analysis",
-        ["🏠 Building Lookup", "📊 Risk Overview", "🗺️ Risk Map", "🎯 Intervention Planning"]
+        "Choose Analysis Module",
+        ["🏠 Building Lookup", "📊 Risk Overview", "🗺️ Risk Map", "🎯 Intervention Planning"],
+        label_visibility="collapsed"
     )
+    
+    # Sidebar info
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("""
+    <div style="color: white; padding: 1.2rem; background: rgba(255,184,28,0.15); border-radius: 0.8rem; border: 2px solid rgba(255,184,28,0.3);">
+        <h4 style="color: #FFB81C; margin-top: 0; font-weight: 700;">🏆 Model Performance</h4>
+        <ul style="font-size: 0.95rem; line-height: 2; list-style: none; padding-left: 0;">
+            <li>✓ <strong>ROC-AUC:</strong> 92.41%</li>
+            <li>✓ <strong>Accuracy:</strong> 87.62%</li>
+            <li>✓ <strong>Precision@10%:</strong> 93.01%</li>
+            <li>✓ <strong>Business Impact:</strong> 3.1× efficiency</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("""
+    <div style="color: white; padding: 1rem;">
+        <h4 style="color: #FFB81C; margin-top: 0; font-weight: 700;">ℹ️ About This Project</h4>
+        <p style="font-size: 0.9rem; line-height: 1.6;">
+            This dashboard provides <strong>AI-powered, building-level vacancy risk predictions</strong> 
+            for NYC office properties using advanced machine learning.
+        </p>
+        <p style="font-size: 0.85rem; line-height: 1.6; margin-top: 1rem;">
+            <strong style="color: #FFB81C;">📊 Data Sources (6):</strong><br>
+            • NYC PLUTO (Building Data)<br>
+            • ACRIS (Property Transactions)<br>
+            • MTA Ridership (Transportation)<br>
+            • DOB Permits (Construction)<br>
+            • Business Registry<br>
+            • Storefronts Vacancy
+        </p>
+        <p style="font-size: 0.85rem; line-height: 1.6; margin-top: 1rem;">
+            <strong style="color: #FFB81C;">🎯 Use Cases:</strong><br>
+            • Policy intervention planning<br>
+            • Investment risk assessment<br>
+            • Urban planning insights<br>
+            • Economic development strategy
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     
     if page == "🏠 Building Lookup":
         building_lookup_page(df, model, feature_names)
@@ -322,10 +753,62 @@ def main():
         risk_map_page(df, model, feature_names)
     elif page == "🎯 Intervention Planning":
         intervention_planning_page(df, model, feature_names)
+    
+    # Professional Footer
+    st.markdown("---")
+    st.markdown("""
+    <div class="footer">
+        <h3 style="color: #667eea; margin-bottom: 1rem;">Office Apocalypse Algorithm</h3>
+        <p style="margin: 0.5rem 0;">
+            <strong>Team:</strong> Ibrahim Denis Fofanah (Lead), Bright Arowny Zaman, Jeevan Hemanth Yendluri
+        </p>
+        <p style="margin: 0.5rem 0;">
+            <strong>Institution:</strong> PACE University | <strong>Advisor:</strong> Dr. Krishna Bathula
+        </p>
+        <p style="margin: 0.5rem 0;">
+            Data Science Capstone Project | Fall 2025
+        </p>
+        <p style="margin-top: 1rem; font-size: 0.85rem; color: #adb5bd;">
+            © 2025 Office Apocalypse Algorithm Team | All Rights Reserved
+        </p>
+        <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #adb5bd;">
+            🔗 <a href="https://github.com/Denis060/capstone_office-apocalypse-algorithm" target="_blank" style="color: #667eea;">GitHub Repository</a>
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 def building_lookup_page(df, model, feature_names):
     """Building-specific risk analysis page."""
-    st.header("🏠 Individual Building Risk Analysis")
+    st.markdown("""
+    <h2 style='color: #003C7D; font-size: 2.5rem; margin-bottom: 1rem; font-weight: 700;'>
+        🏠 Individual Building Risk Analysis
+    </h2>
+    <p style='color: #002855; font-size: 1.1rem; margin-bottom: 1rem;'>
+        Search and analyze vacancy risk for specific NYC office buildings with AI-powered predictions and SHAP explanations.
+    </p>
+    """, unsafe_allow_html=True)
+    
+    # How to Use Guide
+    with st.expander("📖 How to Use This Tool", expanded=False):
+        st.markdown("""
+        <div style="padding: 1rem; background: white;">
+            <h4 style="color: #003C7D; font-size: 1.2rem; margin-bottom: 1rem;">🎯 Step-by-Step Guide:</h4>
+            <ol style="line-height: 2.2; font-size: 1rem; color: #2c3e50;">
+                <li><strong style="color: #003C7D;">Select a search method</strong> (by index, address, or borough)</li>
+                <li><strong style="color: #003C7D;">Choose a building</strong> from the dropdown menu</li>
+                <li><strong style="color: #003C7D;">Review the risk score</strong> displayed in the gauge (0-100%)</li>
+                <li><strong style="color: #003C7D;">Examine building characteristics</strong> in the metrics below</li>
+                <li><strong style="color: #003C7D;">Understand the prediction</strong> using the SHAP explanation chart</li>
+            </ol>
+            <div style="margin-top: 1.5rem; padding: 1rem; background: #fff8e1; border-left: 4px solid #FFB81C; border-radius: 0.5rem;">
+                <p style="margin: 0; font-size: 1rem; color: #2c3e50; line-height: 1.6;">
+                    <strong style="color: #003C7D; font-size: 1.1rem;">💡 Pro Tip:</strong><br>
+                    Red bars in the SHAP chart push predictions toward <strong>HIGH risk</strong>, 
+                    while blue bars push toward <strong>LOW risk</strong>. Longer bars = stronger influence.
+                </p>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
     
     # Building selection
     col1, col2 = st.columns([2, 1])
@@ -341,7 +824,10 @@ def building_lookup_page(df, model, feature_names):
             building_idx = st.selectbox(
                 "Select Building",
                 range(len(df)),
-                format_func=lambda x: f"Building {x+1} - {df.iloc[x]['address'] if 'address' in df.columns else 'No Address'}"
+                format_func=lambda x: (
+                    f"Building {x+1} - {df.iloc[x]['address']}" if 'address' in df.columns and pd.notna(df.iloc[x]['address']) and df.iloc[x]['address'] != 'No Address'
+                    else f"Building {x+1} - BBL: {df.iloc[x].get('BBL', 'Unknown')} ({df.iloc[x].get('borough', 'Unknown')})"
+                )
             )
         elif search_method == "Borough Filter" and 'borough' in df.columns:
             borough = st.selectbox("Select Borough", df['borough'].unique())
@@ -350,7 +836,10 @@ def building_lookup_page(df, model, feature_names):
                 building_idx = st.selectbox(
                     "Select Building",
                     borough_buildings.index,
-                    format_func=lambda x: f"Building {x+1} - {borough_buildings.loc[x, 'address'] if 'address' in df.columns else 'No Address'}"
+                    format_func=lambda x: (
+                        f"Building {x+1} - {borough_buildings.loc[x, 'address']}" if 'address' in df.columns and pd.notna(borough_buildings.loc[x, 'address']) and borough_buildings.loc[x, 'address'] != 'No Address'
+                        else f"Building {x+1} - BBL: {borough_buildings.loc[x].get('BBL', 'Unknown')}"
+                    )
                 )
             else:
                 st.warning("No buildings found in selected borough")
@@ -424,13 +913,22 @@ def building_lookup_page(df, model, feature_names):
             fig = create_feature_importance_plot(shap_values, feature_names, building_features[0])
             st.pyplot(fig)
             
-            st.info("""
-            **How to read this chart:**
-            - Red bars push the prediction toward HIGH risk
-            - Blue bars push the prediction toward LOW risk  
-            - Longer bars = stronger influence on the prediction
-            - Numbers show the actual feature values for this building
-            """)
+            st.markdown("""
+            <div style="background: white; 
+                        padding: 1.2rem; 
+                        border-radius: 0.8rem; 
+                        border: 2px solid #003C7D;
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                        margin-top: 1rem;">
+                <h5 style="color: #003C7D; margin-top: 0;">📖 How to Read This Chart:</h5>
+                <ul style="line-height: 2; font-size: 0.95rem; color: #2c3e50;">
+                    <li><span style="color: #dc3545; font-weight: bold;">Red bars</span> push the prediction toward <strong>HIGH risk</strong></li>
+                    <li><span style="color: #0052A5; font-weight: bold;">Blue bars</span> push the prediction toward <strong>LOW risk</strong></li>
+                    <li><strong>Longer bars</strong> = stronger influence on the prediction</li>
+                    <li><strong>Numbers</strong> show the actual feature values for this building</li>
+                </ul>
+            </div>
+            """, unsafe_allow_html=True)
         except Exception as e:
             st.warning(f"Could not generate explanation: {e}")
     
@@ -439,7 +937,14 @@ def building_lookup_page(df, model, feature_names):
 
 def risk_overview_page(df, model, feature_names):
     """Portfolio risk overview page."""
-    st.header("📊 Portfolio Risk Overview")
+    st.markdown("""
+    <h2 style='color: #003C7D; font-size: 2.5rem; margin-bottom: 1rem; font-weight: 700;'>
+        📊 Portfolio Risk Overview
+    </h2>
+    <p style='color: #002855; font-size: 1.1rem; margin-bottom: 2rem;'>
+        Comprehensive analysis of vacancy risk across all {count:,} NYC office buildings in the portfolio.
+    </p>
+    """.format(count=len(df)), unsafe_allow_html=True)
     
     # Make predictions for all buildings
     with st.spinner('Analyzing all buildings...'):
@@ -464,6 +969,7 @@ def risk_overview_page(df, model, feature_names):
     high_risk_count = sum(predictions >= 0.7)
     medium_risk_count = sum((predictions >= 0.4) & (predictions < 0.7))
     low_risk_count = sum(predictions < 0.4)
+    avg_risk = predictions.mean()
     
     col1, col2, col3, col4 = st.columns(4)
     
@@ -476,8 +982,42 @@ def risk_overview_page(df, model, feature_names):
     with col4:
         st.metric("🟢 Low Risk", f"{low_risk_count:,}", f"{low_risk_count/len(df):.1%}")
     
+    # Key Insights Box
+    st.markdown("""
+    <div style="background: linear-gradient(135deg, #003C7D 0%, #0052A5 100%); 
+                padding: 1.5rem; 
+                border-radius: 1rem; 
+                margin: 1.5rem 0;
+                color: white;
+                box-shadow: 0 4px 15px rgba(0, 60, 125, 0.3);">
+        <h4 style="color: #FFB81C; margin-top: 0;">🔍 Key Portfolio Insights</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <div>
+                <strong style="color: #FFB81C;">Average Risk:</strong><br>
+                {avg_risk:.1%} across all buildings
+            </div>
+            <div>
+                <strong style="color: #FFB81C;">High Priority:</strong><br>
+                {high_risk_count:,} buildings need immediate attention
+            </div>
+            <div>
+                <strong style="color: #FFB81C;">Risk Concentration:</strong><br>
+                {concentration:.1%} of portfolio is high/medium risk
+            </div>
+            <div>
+                <strong style="color: #FFB81C;">Model Confidence:</strong><br>
+                92.41% ROC-AUC, 87.62% Accuracy
+            </div>
+        </div>
+    </div>
+    """.format(
+        avg_risk=avg_risk,
+        high_risk_count=high_risk_count,
+        concentration=(high_risk_count + medium_risk_count) / len(df)
+    ), unsafe_allow_html=True)
+    
     # Risk distribution
-    st.subheader("Risk Distribution")
+    st.subheader("📊 Risk Distribution Across Boroughs")
     fig = create_risk_distribution_plot(df, predictions)
     st.plotly_chart(fig, use_container_width=True)
     
@@ -506,7 +1046,14 @@ def risk_overview_page(df, model, feature_names):
 
 def risk_map_page(df, model, feature_names):
     """Geographic risk visualization page."""
-    st.header("🗺️ Geographic Risk Distribution")
+    st.markdown("""
+    <h2 style='color: #003C7D; font-size: 2.5rem; margin-bottom: 1rem; font-weight: 700;'>
+        🗺️ Geographic Risk Distribution
+    </h2>
+    <p style='color: #002855; font-size: 1.1rem; margin-bottom: 2rem;'>
+        Interactive map showing spatial patterns of office building vacancy risk across NYC boroughs.
+    </p>
+    """, unsafe_allow_html=True)
     
     # Make predictions
     with st.spinner('Generating risk predictions...'):
@@ -535,23 +1082,39 @@ def risk_map_page(df, model, feature_names):
         # Map legend and info
         col1, col2 = st.columns(2)
         with col1:
-            st.info("""
-            **Borough Map Legend:**
-            - 🔴 Manhattan: Central business district
-            - 🟦 Queens: Eastern borough 
-            - 🟢 Bronx: Northern borough
-            - 🔵 Brooklyn: Southern borough
-            - 🟡 Staten Island: Southwest borough
-            """)
+            st.markdown("""
+            <div style="background: white; 
+                        padding: 1.5rem; 
+                        border-radius: 0.8rem; 
+                        border: 3px solid #003C7D;
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                <h4 style="color: #003C7D; margin-top: 0; font-size: 1.2rem; font-weight: 700;">🗺️ Borough Map Legend</h4>
+                <ul style="line-height: 2.2; font-size: 1rem; color: #2c3e50; list-style: none; padding-left: 0;">
+                    <li><span style="color: #003C7D; font-size: 1.5rem;">●</span> <strong>Manhattan:</strong> Central business district</li>
+                    <li><span style="color: #0052A5; font-size: 1.5rem;">●</span> <strong>Brooklyn:</strong> Southern borough</li>
+                    <li><span style="color: #FFB81C; font-size: 1.5rem;">●</span> <strong>Queens:</strong> Eastern borough</li>
+                    <li><span style="color: #002855; font-size: 1.5rem;">●</span> <strong>Bronx:</strong> Northern borough</li>
+                    <li><span style="color: #6699CC; font-size: 1.5rem;">●</span> <strong>Staten Island:</strong> Southwest borough</li>
+                </ul>
+            </div>
+            """, unsafe_allow_html=True)
         
         with col2:
-            st.info("""
-            **Risk Indicators:**
-            - Point size = Risk probability
-            - Hover for details
-            - Colors show borough patterns
-            - Clustering indicates geographic risk concentration
-            """)
+            st.markdown("""
+            <div style="background: white; 
+                        padding: 1.5rem; 
+                        border-radius: 0.8rem; 
+                        border: 3px solid #FFB81C;
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                <h4 style="color: #003C7D; margin-top: 0; font-size: 1.2rem; font-weight: 700;">📍 Risk Indicators</h4>
+                <ul style="line-height: 2.2; font-size: 1rem; color: #2c3e50;">
+                    <li><strong>Point size</strong> = Risk probability magnitude</li>
+                    <li><strong>Hover</strong> for detailed building information</li>
+                    <li><strong>Colors</strong> show borough-specific patterns</li>
+                    <li><strong>Clustering</strong> indicates concentrated risk areas</li>
+                </ul>
+            </div>
+            """, unsafe_allow_html=True)
         
         # Borough risk analysis
         if 'borough' in df.columns:
@@ -628,7 +1191,14 @@ def risk_map_page(df, model, feature_names):
 
 def intervention_planning_page(df, model, feature_names):
     """Intervention prioritization page."""
-    st.header("🎯 Intervention Planning")
+    st.markdown("""
+    <h2 style='color: #003C7D; font-size: 2.5rem; margin-bottom: 1rem; font-weight: 700;'>
+        🎯 Intervention Planning & Targeting
+    </h2>
+    <p style='color: #002855; font-size: 1.1rem; margin-bottom: 2rem;'>
+        Prioritize building interventions based on risk scores, building characteristics, and policy parameters.
+    </p>
+    """, unsafe_allow_html=True)
     
     # Make predictions
     with st.spinner('Prioritizing interventions...'):
