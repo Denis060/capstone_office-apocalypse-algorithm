@@ -4,8 +4,8 @@ Office Apocalypse Algorithm - Interactive Dashboard
 Streamlit web application for vacancy risk prediction
 
 Champion Model: XGBoost (92.41% ROC-AUC)
-Version: 2.0 (Simplified feature display - SHAP removed for stability)
-Build: 20251201-stable
+Version: 2.1 (Feature importance chart - simpler than SHAP)
+Build: 20251201-visual
 """
 
 import streamlit as st
@@ -965,26 +965,69 @@ def building_lookup_page(df, model, feature_names):
             if 'value_per_sqft' in building.index:
                 st.metric("Value per Sq Ft", f"${building['value_per_sqft']:.0f}")
         
-        # Feature Summary
-        st.subheader("Key Building Features")
+        # Feature Importance Visualization
+        st.subheader("Top Features for This Building")
         
-        # Display top 10 features in a clean table format
-        feature_data = []
-        for i, fname in enumerate(feature_names[:10]):
-            try:
-                fval = building_features[0][i]
-                if not (pd.isna(fval) or np.isinf(fval)):
-                    feature_data.append({
-                        'Feature': fname.replace('_', ' ').title(),
-                        'Value': f"{float(fval):.2f}" if abs(float(fval)) < 1000 else f"{float(fval):,.0f}"
-                    })
-            except:
-                pass
-        
-        if feature_data:
-            st.dataframe(pd.DataFrame(feature_data), use_container_width=True, hide_index=True)
-        
-        st.info("💡 **Model Insight:** This building's risk prediction is based on 20 engineered features including building age, office area, construction activity, and market indicators. The XGBoost model achieved 92.41% ROC-AUC on validation data.")
+        try:
+            # Get feature importances from the model
+            feature_importance = model.feature_importances_
+            
+            # Create a simple dataframe with feature names and importances
+            importance_df = pd.DataFrame({
+                'Feature': [f.replace('_', ' ').title() for f in feature_names],
+                'Importance': feature_importance,
+                'Value': [float(x) if not (pd.isna(x) or np.isinf(x)) else 0.0 for x in building_features[0]]
+            }).sort_values('Importance', ascending=False).head(10)
+            
+            # Create a simple bar chart
+            fig, ax = plt.subplots(figsize=(10, 6))
+            colors = ['#003C7D' if risk_probability >= 0.7 else '#0052A5' if risk_probability >= 0.4 else '#28a745'] * 10
+            bars = ax.barh(importance_df['Feature'], importance_df['Importance'], color=colors, alpha=0.7)
+            
+            ax.set_xlabel('Feature Importance', fontsize=12, fontweight='bold')
+            ax.set_title('Top 10 Most Important Features for Prediction', fontsize=14, fontweight='bold')
+            ax.grid(axis='x', alpha=0.3)
+            
+            # Add value labels
+            for i, (idx, row) in enumerate(importance_df.iterrows()):
+                value = row['Value']
+                if abs(value) >= 1000:
+                    val_text = f"Value: {value:,.0f}"
+                elif abs(value) >= 1:
+                    val_text = f"Value: {value:.2f}"
+                else:
+                    val_text = f"Value: {value:.4f}"
+                ax.text(row['Importance'], i, f"  {val_text}", va='center', fontsize=9, color='#2c3e50')
+            
+            plt.tight_layout()
+            st.pyplot(fig)
+            
+            st.markdown("""
+            <div style="background: white; padding: 1rem; border-radius: 0.8rem; border: 2px solid #003C7D; margin-top: 1rem;">
+                <h5 style="color: #003C7D; margin-top: 0;">📖 How to Read This Chart:</h5>
+                <ul style="line-height: 1.8; font-size: 0.95rem; color: #2c3e50;">
+                    <li><strong>Bar length</strong> shows how important each feature is for the model's predictions</li>
+                    <li><strong>Values</strong> on the right show this building's actual measurements</li>
+                    <li>Features like <strong>building age, office area, and construction activity</strong> are typically most influential</li>
+                </ul>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        except Exception as e:
+            st.warning(f"Visualization unavailable. Showing feature table instead.")
+            feature_data = []
+            for i, fname in enumerate(feature_names[:10]):
+                try:
+                    fval = building_features[0][i]
+                    if not (pd.isna(fval) or np.isinf(fval)):
+                        feature_data.append({
+                            'Feature': fname.replace('_', ' ').title(),
+                            'Value': f"{float(fval):.2f}" if abs(float(fval)) < 1000 else f"{float(fval):,.0f}"
+                        })
+                except:
+                    pass
+            if feature_data:
+                st.dataframe(pd.DataFrame(feature_data), use_container_width=True, hide_index=True)
     
     except Exception as e:
         st.error(f"Error making prediction: {e}")
