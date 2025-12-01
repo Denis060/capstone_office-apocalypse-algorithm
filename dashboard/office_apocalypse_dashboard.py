@@ -4,7 +4,7 @@ Office Apocalypse Algorithm - Interactive Dashboard
 Streamlit web application for vacancy risk prediction
 
 Champion Model: XGBoost (92.41% ROC-AUC)
-Version: 1.0
+Version: 1.1 (SHAP fix + footer update)
 """
 
 import streamlit as st
