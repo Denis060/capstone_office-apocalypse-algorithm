@@ -4,8 +4,8 @@ Office Apocalypse Algorithm - Interactive Dashboard
 Streamlit web application for vacancy risk prediction
 
 Champion Model: XGBoost (92.41% ROC-AUC)
-Version: 1.4 (Data cleaning at load + SHAP fix)
-Build: 20251201-v4
+Version: 1.5 (Bulletproof string-to-float conversion)
+Build: 20251201-final
 """
 
 import streamlit as st
@@ -900,13 +900,23 @@ def building_lookup_page(df, model, feature_names):
             value = building[feature]
             # Handle various data types and edge cases
             try:
-                if isinstance(value, (list, np.ndarray)):
-                    value = float(value[0]) if len(value) > 0 else 0.0
-                elif pd.isna(value) or np.isinf(value):
+                # Convert to string first, then clean
+                value_str = str(value).strip()
+                
+                # Remove brackets if present
+                if value_str.startswith('[') and value_str.endswith(']'):
+                    value_str = value_str[1:-1].strip()
+                
+                # Handle empty strings
+                if value_str == '' or value_str.lower() == 'nan':
                     value = 0.0
                 else:
-                    value = float(value)
-            except (ValueError, TypeError):
+                    value = float(value_str)
+                    
+                # Check for inf/nan after conversion
+                if pd.isna(value) or np.isinf(value):
+                    value = 0.0
+            except (ValueError, TypeError, AttributeError):
                 value = 0.0
             building_features.append(value)
         else:
@@ -958,10 +968,14 @@ def building_lookup_page(df, model, feature_names):
         # SHAP explanation
         st.subheader("Prediction Explanation")
         try:
-            explainer = shap.TreeExplainer(model)
-            shap_values = explainer.shap_values(building_features)
+            # Ensure building_features are clean floats
+            clean_features = np.array([float(x) if not (pd.isna(x) or np.isinf(x)) else 0.0 
+                                      for x in building_features[0]], dtype=np.float64).reshape(1, -1)
             
-            fig = create_feature_importance_plot(shap_values, feature_names, building_features[0])
+            explainer = shap.TreeExplainer(model)
+            shap_values = explainer.shap_values(clean_features)
+            
+            fig = create_feature_importance_plot(shap_values, feature_names, clean_features[0])
             st.pyplot(fig)
             
             st.markdown("""
