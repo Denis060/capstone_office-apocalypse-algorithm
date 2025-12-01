@@ -4,7 +4,8 @@ Office Apocalypse Algorithm - Interactive Dashboard
 Streamlit web application for vacancy risk prediction
 
 Champion Model: XGBoost (92.41% ROC-AUC)
-Version: 1.3 (Force cloud rebuild - SHAP fix confirmed working locally)
+Version: 1.4 (Data cleaning at load + SHAP fix)
+Build: 20251201-v4
 """
 
 import streamlit as st
@@ -355,6 +356,15 @@ def load_data():
             data_path = os.path.join(project_root, 'data', 'processed', 'office_buildings_clean.csv')
             df = pd.read_csv(data_path)
             st.info("ℹ️ Loaded dataset without coordinates. Geographic mapping not available.")
+        
+        # Clean any string-formatted numeric columns (fix for SHAP visualization)
+        for col in df.columns:
+            if df[col].dtype == 'object':
+                try:
+                    # Try to convert string columns to numeric
+                    df[col] = pd.to_numeric(df[col], errors='ignore')
+                except:
+                    pass
         
         # Create target if not exists
         if 'target_high_vacancy_risk' not in df.columns:
