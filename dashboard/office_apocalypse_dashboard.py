@@ -4,7 +4,7 @@ Office Apocalypse Algorithm - Interactive Dashboard
 Streamlit web application for vacancy risk prediction
 
 Champion Model: XGBoost (92.41% ROC-AUC)
-Version: 1.1 (SHAP fix + footer update)
+Version: 1.2 (Enhanced SHAP string handling)
 """
 
 import streamlit as st
@@ -445,11 +445,26 @@ def create_feature_importance_plot(shap_values, feature_names, building_data):
     # Get SHAP values for this building
     shap_vals = shap_values[0] if len(shap_values.shape) > 1 else shap_values
     
+    # Clean building_data to ensure all values are floats
+    clean_building_data = []
+    for val in building_data:
+        try:
+            if isinstance(val, (list, np.ndarray)):
+                val = float(val[0]) if len(val) > 0 else 0.0
+            elif isinstance(val, str):
+                # Remove brackets and convert
+                val = float(val.strip('[]'))
+            else:
+                val = float(val)
+        except (ValueError, TypeError, AttributeError):
+            val = 0.0
+        clean_building_data.append(val)
+    
     # Sort features by absolute SHAP value
     importance_df = pd.DataFrame({
         'feature': feature_names,
         'shap_value': shap_vals,
-        'feature_value': building_data
+        'feature_value': clean_building_data
     })
     importance_df['abs_shap'] = np.abs(importance_df['shap_value'])
     importance_df = importance_df.sort_values('abs_shap', ascending=True).tail(10)
