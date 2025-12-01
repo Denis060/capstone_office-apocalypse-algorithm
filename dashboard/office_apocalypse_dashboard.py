@@ -469,8 +469,26 @@ def create_feature_importance_plot(shap_values, feature_names, building_data):
     for i, bar in enumerate(bars):
         width = bar.get_width()
         feature_val = importance_df.iloc[i]['feature_value']
+        
+        # Handle various data types safely
+        try:
+            if isinstance(feature_val, (list, np.ndarray)):
+                feature_val = float(feature_val[0]) if len(feature_val) > 0 else 0.0
+            else:
+                feature_val = float(feature_val)
+            
+            # Format based on magnitude
+            if abs(feature_val) >= 1000:
+                val_text = f'{feature_val:,.0f}'
+            elif abs(feature_val) >= 1:
+                val_text = f'{feature_val:.2f}'
+            else:
+                val_text = f'{feature_val:.4f}'
+        except (ValueError, TypeError):
+            val_text = str(feature_val)
+        
         ax.text(width + (0.01 if width > 0 else -0.01), bar.get_y() + bar.get_height()/2, 
-                f'{feature_val:.2f}', ha='left' if width > 0 else 'right', va='center', fontsize=8)
+                val_text, ha='left' if width > 0 else 'right', va='center', fontsize=8)
     
     plt.tight_layout()
     return fig
@@ -855,13 +873,21 @@ def building_lookup_page(df, model, feature_names):
     for feature in feature_names:
         if feature in building.index:
             value = building[feature]
-            if pd.isna(value) or np.isinf(value):
-                value = 0
+            # Handle various data types and edge cases
+            try:
+                if isinstance(value, (list, np.ndarray)):
+                    value = float(value[0]) if len(value) > 0 else 0.0
+                elif pd.isna(value) or np.isinf(value):
+                    value = 0.0
+                else:
+                    value = float(value)
+            except (ValueError, TypeError):
+                value = 0.0
             building_features.append(value)
         else:
-            building_features.append(0)
+            building_features.append(0.0)
     
-    building_features = np.array(building_features).reshape(1, -1)
+    building_features = np.array(building_features, dtype=np.float64).reshape(1, -1)
     
     # Make prediction
     try:
