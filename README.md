@@ -35,7 +35,7 @@ The Office Apocalypse Algorithm is a production-ready machine learning framework
 - **ROC-AUC**: **92.41%** (excellent discrimination)
 - **Accuracy**: 87.62% (realistic deployment performance)  
 - **Precision@10%**: **93.01%** (93 of top 100 predictions correct)
-- **Business Impact**: **3.1× efficiency** vs random targeting, **85% cost reduction**
+- **Business Impact**: **2.23× efficiency** vs random targeting, **68% cost reduction**
 - **Dataset**: 7,191 NYC office buildings (2,157 high-risk, 5,034 low-risk)
 
 ### Geographic Insights
@@ -130,7 +130,7 @@ office_apocalypse_algorithm_project/
 
 ### 1. Champion Model Development
 - **XGBoost Excellence**: 92.41% ROC-AUC outperforming baseline by 4.2 percentage points
-- **Business Value**: 3.1× efficiency improvement, 85% operational cost reduction
+- **Business Value**: 2.23× efficiency improvement, 68% operational cost reduction
 - **High Precision**: 93.01% precision@10% for top building identification
 - **Production Ready**: Deployed Streamlit dashboard with SHAP interpretability
 
@@ -214,7 +214,7 @@ python scripts/shap_model_interpretation.py
 | Random Forest | 91.67% | 86.89% | 91.25% | 78.12% |
 | Logistic Regression | 88.22% | 81.73% | 87.50% | 72.34% |
 
-**Business Impact**: Champion model achieves 3.1× efficiency vs random targeting with 85% cost reduction.
+**Business Impact**: Champion model achieves 2.23× efficiency vs random targeting with 68% cost reduction.
 
 ---
 

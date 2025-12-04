@@ -32,7 +32,7 @@ def create_chart1_borough_distribution():
     buildings = [2507, 1776, 1619, 705, 584]
     colors = PACE_PALETTE  # Use official PACE colors
     
-    fig, ax = plt.subplots(figsize=(10, 8))
+    fig, ax = plt.subplots(figsize=(16, 12))
     wedges, texts, autotexts = ax.pie(
         buildings, 
         labels=boroughs, 
@@ -49,8 +49,9 @@ def create_chart1_borough_distribution():
     plt.title('Office Buildings Distribution by Borough\n(Total: 7,191 Buildings)', 
               fontsize=16, weight='bold', pad=20)
     plt.tight_layout()
+    plt.savefig(output_dir / 'chart1_borough_distribution.svg', bbox_inches='tight', format='svg')
     plt.savefig(output_dir / 'chart1_borough_distribution.png', dpi=300, bbox_inches='tight')
-    print("✅ Chart 1 saved: Borough Distribution Pie Chart")
+    print("✅ Chart 1 saved: Borough Distribution Pie Chart (SVG + PNG)")
     plt.close()
 
 def create_chart2_data_sources():
@@ -59,7 +60,7 @@ def create_chart2_data_sources():
                     'DOB\nPermits', 'Storefront\nVacancy']
     record_counts = [857736, 1500000, 250000, 3800000, 850000, 12000]
     
-    fig, ax = plt.subplots(figsize=(12, 6))
+    fig, ax = plt.subplots(figsize=(16, 8))
     bars = ax.barh(data_sources, record_counts, color=PACE_BLUE)
     
     # Add value labels
@@ -74,49 +75,52 @@ def create_chart2_data_sources():
                  fontsize=16, weight='bold', pad=20)
     ax.xaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'{x/1e6:.1f}M' if x >= 1e6 else f'{x/1e3:.0f}K'))
     plt.tight_layout()
+    plt.savefig(output_dir / 'chart2_data_sources.svg', bbox_inches='tight', format='svg')
     plt.savefig(output_dir / 'chart2_data_sources.png', dpi=300, bbox_inches='tight')
-    print("✅ Chart 2 saved: Data Sources Bar Chart")
+    print("✅ Chart 2 saved: Data Sources Bar Chart (SVG + PNG)")
     plt.close()
 
 def create_chart3_system_architecture():
     """Chart 3: System Architecture Diagram - Flowchart with enhanced clarity"""
-    fig, ax = plt.subplots(figsize=(16, 10), dpi=300)
+    fig, ax = plt.subplots(figsize=(20, 12), dpi=400)
     ax.axis('off')
     
-    # Define boxes with PACE colors
+    # Define boxes with PACE colors - gradient from light to dark blue with gold accents
     boxes = [
         # Data Sources
         {'text': '6 Data Sources\n(PLUTO, ACRIS, DOB,\nMTA, Business, Storefront)', 
-         'xy': (0.1, 0.7), 'color': '#E3F2FD', 'width': 0.15},
+         'xy': (0.1, 0.7), 'color': '#B3D1E6', 'width': 0.15},  # Light PACE blue
         
         # ETL Pipeline
         {'text': 'ETL Pipeline\n(BBL Standardization,\nTemporal Alignment)', 
-         'xy': (0.3, 0.7), 'color': '#C8E6C9', 'width': 0.15},
+         'xy': (0.3, 0.7), 'color': '#6699CC', 'width': 0.15},  # Medium light blue
         
         # Feature Engineering
         {'text': 'Feature Engineering\n(20 Leakage-Free\nFeatures)', 
-         'xy': (0.5, 0.7), 'color': '#FFF9C4', 'width': 0.15},
+         'xy': (0.5, 0.7), 'color': '#FFE599', 'width': 0.15},  # PACE gold tint
         
         # XGBoost Model
         {'text': 'XGBoost Model\n(92.41% ROC-AUC)\n7,191 Buildings', 
-         'xy': (0.7, 0.7), 'color': '#FFCCBC', 'width': 0.15},
+         'xy': (0.7, 0.7), 'color': '#0052A5', 'width': 0.15},  # PACE blue light
         
         # SHAP Analysis
         {'text': 'SHAP Analysis\n(Feature Importance\n& Explainability)', 
-         'xy': (0.5, 0.4), 'color': '#E1BEE7', 'width': 0.15},
+         'xy': (0.5, 0.4), 'color': '#003C7D', 'width': 0.15},  # PACE blue primary
         
         # Dashboard Output
         {'text': 'Streamlit Dashboard\n(Risk Scores,\nInterventions)', 
-         'xy': (0.7, 0.4), 'color': '#B2DFDB', 'width': 0.15},
+         'xy': (0.7, 0.4), 'color': '#002855', 'width': 0.15},  # PACE navy
     ]
     
     for box in boxes:
         rect = plt.Rectangle(box['xy'], box['width'], 0.15, 
-                           facecolor=box['color'], edgecolor='black', linewidth=3)
+                           facecolor=box['color'], edgecolor='black', linewidth=4)
         ax.add_patch(rect)
+        # Use white text for dark backgrounds, black for light backgrounds
+        text_color = 'white' if box['color'] in ['#003C7D', '#002855', '#0052A5'] else 'black'
         ax.text(box['xy'][0] + box['width']/2, box['xy'][1] + 0.075, 
-               box['text'], ha='center', va='center', fontsize=14, weight='bold', 
-               fontfamily='sans-serif')
+               box['text'], ha='center', va='center', fontsize=18, weight='bold', 
+               fontfamily='sans-serif', color=text_color, antialiased=True)
     
     # Add arrows
     arrows = [
@@ -134,12 +138,14 @@ def create_chart3_system_architecture():
     
     ax.set_xlim(0, 1)
     ax.set_ylim(0.2, 1)
-    plt.title('System Architecture: End-to-End ML Pipeline', 
-             fontsize=22, weight='bold', pad=20, fontfamily='sans-serif')
     plt.tight_layout()
-    plt.savefig(output_dir / 'chart3_system_architecture.png', dpi=400, bbox_inches='tight', 
+    
+    # Save as both SVG (vector - never blurry) and PNG (backup)
+    plt.savefig(output_dir / 'chart3_system_architecture.svg', bbox_inches='tight', 
+                facecolor='white', edgecolor='none', format='svg')
+    plt.savefig(output_dir / 'chart3_system_architecture.png', dpi=600, bbox_inches='tight', 
                 facecolor='white', edgecolor='none')
-    print("✅ Chart 3 saved: System Architecture Diagram")
+    print("✅ Chart 3 saved: System Architecture Diagram (SVG + PNG)")
     plt.close()
 
 def create_chart4_model_comparison():
@@ -148,7 +154,7 @@ def create_chart4_model_comparison():
     roc_auc_scores = [0.9241, 0.9208, 0.8820]
     colors = [PACE_NAVY, PACE_BLUE, PACE_BLUE_LIGHT]  # PACE color gradient
     
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(16, 9))
     bars = ax.barh(models, roc_auc_scores, color=colors, edgecolor='black', linewidth=2)
     
     # Add value labels
@@ -164,8 +170,9 @@ def create_chart4_model_comparison():
     ax.set_title('Model Performance Comparison (ROC-AUC)', 
                 fontsize=16, weight='bold', pad=20)
     plt.tight_layout()
+    plt.savefig(output_dir / 'chart4_model_comparison.svg', bbox_inches='tight', format='svg')
     plt.savefig(output_dir / 'chart4_model_comparison.png', dpi=300, bbox_inches='tight')
-    print("✅ Chart 4 saved: Model Performance Comparison")
+    print("✅ Chart 4 saved: Model Performance Comparison (SVG + PNG)")
     plt.close()
 
 def create_chart5_shap_importance():
@@ -176,7 +183,7 @@ def create_chart5_shap_importance():
     # Use PACE blue gradient for importance
     colors = [PACE_NAVY, PACE_BLUE, PACE_BLUE_LIGHT, '#4A90E2', '#6699CC']
     
-    fig, ax = plt.subplots(figsize=(10, 7))
+    fig, ax = plt.subplots(figsize=(16, 10))
     bars = ax.barh(features, shap_values, color=colors, edgecolor='black', linewidth=2)
     
     # Add value labels
@@ -190,8 +197,9 @@ def create_chart5_shap_importance():
                 fontsize=16, weight='bold', pad=20)
     ax.set_xlim(0, 1.6)
     plt.tight_layout()
+    plt.savefig(output_dir / 'chart5_shap_importance.svg', bbox_inches='tight', format='svg')
     plt.savefig(output_dir / 'chart5_shap_importance.png', dpi=300, bbox_inches='tight')
-    print("✅ Chart 5 saved: SHAP Feature Importance")
+    print("✅ Chart 5 saved: SHAP Feature Importance (SVG + PNG)")
     plt.close()
 
 def create_chart6_borough_risk():
@@ -200,10 +208,13 @@ def create_chart6_borough_risk():
     risk_percentages = [40.9, 32.9, 27.9, 25.5, 22.1]
     building_counts = [1776, 1619, 584, 705, 2507]
     
-    # PACE colors: Navy (high risk) to Light Blue (low risk) with Gold accent
-    colors = [PACE_NAVY, '#E74C3C', PACE_GOLD, '#4A90E2', PACE_BLUE_LIGHT]
+    # Single color gradient: darker blue = higher risk (academic convention)
+    # Create gradient from dark PACE blue to light blue
+    from matplotlib.colors import LinearSegmentedColormap
+    blues = ['#001F3F', '#003C7D', '#0052A5', '#4A90E2', '#6699CC']
+    colors = blues  # Darkest to lightest matches highest to lowest risk
     
-    fig, ax = plt.subplots(figsize=(12, 7))
+    fig, ax = plt.subplots(figsize=(16, 9))
     bars = ax.bar(boroughs, risk_percentages, color=colors, edgecolor='black', linewidth=2)
     
     # Add value labels with building counts
@@ -224,18 +235,19 @@ def create_chart6_borough_risk():
     ax.legend(fontsize=12)
     
     plt.tight_layout()
+    plt.savefig(output_dir / 'chart6_borough_risk.svg', bbox_inches='tight', format='svg')
     plt.savefig(output_dir / 'chart6_borough_risk.png', dpi=300, bbox_inches='tight')
-    print("✅ Chart 6 saved: Borough Risk Heat Map")
+    print("✅ Chart 6 saved: Borough Risk Heat Map (SVG + PNG)")
     plt.close()
 
 def create_chart7_business_impact():
     """Chart 7: Business Impact Visualization - Comparison Chart"""
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 7))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(18, 9))
     
-    # Success Rate Comparison
+    # Success Rate Comparison - PACE Colors
     methods = ['Random\nTargeting', 'Model-Driven\nTargeting']
     success_rates = [30, 93]
-    colors_success = ['#E74C3C', PACE_BLUE]  # Red for poor, PACE blue for excellent
+    colors_success = [PACE_BLUE_LIGHT, PACE_NAVY]  # Light blue for poor, Navy for excellent
     
     bars1 = ax1.bar(methods, success_rates, color=colors_success, edgecolor='black', linewidth=2)
     for bar, rate in zip(bars1, success_rates):
@@ -245,12 +257,13 @@ def create_chart7_business_impact():
     
     ax1.set_ylabel('Success Rate (%)', fontsize=14, weight='bold')
     ax1.set_ylim(0, 110)
-    ax1.set_title('Targeting Success Rate', fontsize=14, weight='bold')
-    ax1.axhline(y=50, color='gray', linestyle='--', linewidth=1, alpha=0.5)
+    ax1.set_title('Targeting Success Rate', fontsize=14, weight='bold', color=PACE_NAVY)
+    ax1.axhline(y=50, color=PACE_GOLD, linestyle='--', linewidth=2, alpha=0.7, label='50% Benchmark')
+    ax1.legend(fontsize=11)
     
-    # Cost Comparison
+    # Cost Comparison - PACE Colors
     costs = [5.0, 3.6]
-    colors_cost = ['#E74C3C', PACE_BLUE]  # Red for high cost, PACE blue for low cost
+    colors_cost = [PACE_BLUE_LIGHT, PACE_NAVY]  # Light blue for high cost, Navy for low cost
     
     bars2 = ax2.bar(methods, costs, color=colors_cost, edgecolor='black', linewidth=2)
     for bar, cost in zip(bars2, costs):
@@ -260,106 +273,165 @@ def create_chart7_business_impact():
     
     ax2.set_ylabel('Intervention Cost ($M)', fontsize=14, weight='bold')
     ax2.set_ylim(0, 6)
-    ax2.set_title('Total Cost for Equivalent Coverage', fontsize=14, weight='bold')
+    ax2.set_title('Total Cost for Equivalent Coverage', fontsize=14, weight='bold', color=PACE_NAVY)
     
     # Add improvement annotation with PACE gold
-    ax2.text(0.5, 4.5, '85% Cost\nReduction', ha='center', va='center',
+    ax2.text(0.5, 4.5, '$1.4M\nSavings', ha='center', va='center',
             fontsize=14, weight='bold', color=PACE_NAVY,
-            bbox=dict(boxstyle='round', facecolor=PACE_GOLD, alpha=0.9, edgecolor=PACE_BLUE, linewidth=2))
+            bbox=dict(boxstyle='round', facecolor=PACE_GOLD, alpha=0.9, edgecolor=PACE_BLUE, linewidth=3))
     
     fig.suptitle('Business Impact: Model-Driven vs Random Targeting\n3.1× Efficiency Improvement', 
                 fontsize=18, weight='bold', y=1.02)
     plt.tight_layout()
+    plt.savefig(output_dir / 'chart7_business_impact.svg', bbox_inches='tight', format='svg')
     plt.savefig(output_dir / 'chart7_business_impact.png', dpi=300, bbox_inches='tight')
-    print("✅ Chart 7 saved: Business Impact Comparison")
+    print("✅ Chart 7 saved: Business Impact Comparison (SVG + PNG)")
     plt.close()
 
 def create_chart8_metrics_dashboard():
-    """Chart 8: Performance Metrics Dashboard - Compact visual replacing tables"""
-    fig = plt.figure(figsize=(12, 8), dpi=300, facecolor='white')
-    ax = fig.add_subplot(111)
-    ax.axis('off')
+    """Chart 8: Performance Metrics Dashboard - Professional KPI visualization"""
+    fig = plt.figure(figsize=(18, 14), dpi=300, facecolor='white')
     
-    # Main champion metric - center
-    ax.text(0.5, 0.75, '92.41%', ha='center', va='center', 
-            fontsize=80, weight='bold', color=PACE_BLUE, fontfamily='sans-serif')
-    ax.text(0.5, 0.65, 'ROC-AUC Score', ha='center', va='center', 
-            fontsize=24, weight='bold', color=PACE_NAVY, fontfamily='sans-serif')
-    ax.text(0.5, 0.60, 'XGBoost Champion Model', ha='center', va='center', 
-            fontsize=16, color='#555555', fontfamily='sans-serif')
+    # Create grid layout - 4 rows instead of 3
+    gs = fig.add_gridspec(4, 3, hspace=0.35, wspace=0.3, 
+                         left=0.1, right=0.9, top=0.92, bottom=0.08)
     
-    # Key metrics - top row
-    metrics_top = [
-        {'value': '93.01%', 'label': 'Precision@10%', 'sublabel': 'Targeting Accuracy', 'x': 0.25},
-        {'value': '95.12%', 'label': 'Precision@5%', 'sublabel': 'Critical Interventions', 'x': 0.75},
+    # Title
+    fig.text(0.5, 0.96, 'Model Performance Metrics', ha='center', va='top',
+            fontsize=32, weight='bold', color=PACE_NAVY, fontfamily='sans-serif')
+    
+    # ----- CENTER: Main ROC-AUC Metric ----- (ENLARGED for prominence)
+    ax_center = fig.add_subplot(gs[1, 1])
+    ax_center.axis('off')
+    
+    # Create circular badge for main metric (LARGER for emphasis)
+    circle = plt.Circle((0.5, 0.5), 0.52, color=PACE_BLUE, alpha=0.12, transform=ax_center.transAxes)
+    ax_center.add_patch(circle)
+    circle_border = plt.Circle((0.5, 0.5), 0.52, fill=False, edgecolor=PACE_BLUE, 
+                              linewidth=7, transform=ax_center.transAxes)
+    ax_center.add_patch(circle_border)
+    
+    ax_center.text(0.5, 0.60, '92.41%', ha='center', va='center', 
+                  fontsize=64, weight='bold', color=PACE_NAVY, fontfamily='sans-serif',
+                  transform=ax_center.transAxes)
+    ax_center.text(0.5, 0.36, 'ROC-AUC', ha='center', va='center', 
+                  fontsize=26, weight='bold', color=PACE_BLUE, fontfamily='sans-serif',
+                  transform=ax_center.transAxes)
+    ax_center.text(0.5, 0.24, 'XGBoost Champion', ha='center', va='center', 
+                  fontsize=14, color='#555555', fontfamily='sans-serif', style='italic',
+                  transform=ax_center.transAxes)
+    
+    # ----- TOP ROW: Precision Metrics ----- (ENLARGED)
+    precision_metrics = [
+        {'value': '93.01%', 'label': 'Precision@10%', 'sublabel': 'Top 10% Targeting', 'pos': gs[0, 0]},
+        {'value': '95.12%', 'label': 'Precision@5%', 'sublabel': 'Critical Cases', 'pos': gs[0, 2]},
     ]
     
-    for metric in metrics_top:
-        # Box background
-        rect = plt.Rectangle((metric['x']-0.12, 0.82), 0.24, 0.15, 
-                           facecolor='#F8F9FA', edgecolor=PACE_BLUE, linewidth=3, 
+    for metric in precision_metrics:
+        ax = fig.add_subplot(metric['pos'])
+        ax.axis('off')
+        
+        # Background box
+        rect = plt.Rectangle((0.05, 0.15), 0.9, 0.7, 
+                           facecolor='#F8F9FA', edgecolor=PACE_BLUE_LIGHT, linewidth=4, 
+                           transform=ax.transAxes, zorder=1, alpha=0.8)
+        ax.add_patch(rect)
+        
+        ax.text(0.5, 0.65, metric['value'], ha='center', va='center', 
+                fontsize=56, weight='bold', color=PACE_BLUE, fontfamily='sans-serif',
+                transform=ax.transAxes)
+        ax.text(0.5, 0.40, metric['label'], ha='center', va='center', 
+                fontsize=18, weight='bold', color=PACE_NAVY, fontfamily='sans-serif',
+                transform=ax.transAxes)
+        ax.text(0.5, 0.22, metric['sublabel'], ha='center', va='center', 
+                fontsize=13, color='#555555', fontfamily='sans-serif',
+                transform=ax.transAxes)
+    
+    # ----- MIDDLE ROW: Model Info -----
+    ax_left = fig.add_subplot(gs[1, 0])
+    ax_left.axis('off')
+    ax_left.text(0.5, 0.75, '7,191', ha='center', va='center', 
+                fontsize=42, weight='bold', color=PACE_NAVY, fontfamily='sans-serif',
+                transform=ax_left.transAxes)
+    ax_left.text(0.5, 0.48, 'NYC Office Buildings', ha='center', va='center', 
+                fontsize=14, weight='bold', color=PACE_BLUE, fontfamily='sans-serif',
+                transform=ax_left.transAxes)
+    ax_left.text(0.5, 0.32, 'in Dataset', ha='center', va='center', 
+                fontsize=12, color='#555555', fontfamily='sans-serif',
+                transform=ax_left.transAxes)
+    rect = plt.Rectangle((0.1, 0.25), 0.8, 0.6, fill=False, 
+                        edgecolor=PACE_GOLD, linewidth=3, transform=ax_left.transAxes)
+    ax_left.add_patch(rect)
+    
+    ax_right = fig.add_subplot(gs[1, 2])
+    ax_right.axis('off')
+    ax_right.text(0.5, 0.75, '20', ha='center', va='center', 
+                 fontsize=42, weight='bold', color=PACE_NAVY, fontfamily='sans-serif',
+                 transform=ax_right.transAxes)
+    ax_right.text(0.5, 0.50, 'Engineered\nFeatures', ha='center', va='center', 
+                 fontsize=16, weight='bold', color=PACE_BLUE, fontfamily='sans-serif',
+                 transform=ax_right.transAxes)
+    rect = plt.Rectangle((0.1, 0.25), 0.8, 0.6, fill=False, 
+                        edgecolor=PACE_GOLD, linewidth=3, transform=ax_right.transAxes)
+    ax_right.add_patch(rect)
+    
+    # ----- ROW 3: First set of business metrics (2 boxes) -----
+    row3_metrics = [
+        {'value': '$1.4M', 'label': 'Cost Savings', 'detail': 'Per 1,000 Buildings', 'pos': gs[2, 0], 'color': PACE_GOLD},
+        {'value': '68%', 'label': 'Lower Cost/Success', 'detail': '$16.7K → $5.4K per IK', 'pos': gs[2, 2], 'color': PACE_NAVY},
+    ]
+    
+    for metric in row3_metrics:
+        ax = fig.add_subplot(metric['pos'])
+        ax.axis('off')
+        
+        # White background with border
+        rect = plt.Rectangle((0.05, 0.15), 0.9, 0.7, 
+                           facecolor='white', edgecolor='black', linewidth=2,
                            transform=ax.transAxes, zorder=1)
         ax.add_patch(rect)
         
-        ax.text(metric['x'], 0.92, metric['value'], ha='center', va='center', 
-                fontsize=32, weight='bold', color=PACE_BLUE, fontfamily='sans-serif',
+        ax.text(0.5, 0.65, metric['value'], ha='center', va='center', 
+                fontsize=44, weight='bold', color=metric['color'], fontfamily='sans-serif',
                 transform=ax.transAxes)
-        ax.text(metric['x'], 0.86, metric['label'], ha='center', va='center', 
+        ax.text(0.5, 0.42, metric['label'], ha='center', va='center', 
                 fontsize=14, weight='bold', color=PACE_NAVY, fontfamily='sans-serif',
                 transform=ax.transAxes)
-        ax.text(metric['x'], 0.83, metric['sublabel'], ha='center', va='center', 
+        ax.text(0.5, 0.25, metric['detail'], ha='center', va='center', 
                 fontsize=10, color='#555555', fontfamily='sans-serif',
                 transform=ax.transAxes)
     
-    # Bottom metrics - business impact
-    metrics_bottom = [
-        {'value': '85%', 'label': 'Cost Reduction', 'icon': '💰', 'x': 0.2},
-        {'value': '3.1×', 'label': 'Efficiency Gain', 'icon': '⚡', 'x': 0.5},
-        {'value': '7,191', 'label': 'Buildings Analyzed', 'icon': '🏢', 'x': 0.8},
+    # ----- ROW 4: Single centered efficiency metric -----
+    row4_metrics = [
+        {'value': '2.23×', 'label': 'More Successes', 'detail': 'vs. Random', 'pos': gs[3, 1], 'color': PACE_BLUE}
     ]
     
-    for metric in metrics_bottom:
-        # Box background with gold accent
-        rect = plt.Rectangle((metric['x']-0.1, 0.35), 0.2, 0.15, 
-                           facecolor=PACE_GOLD, edgecolor=PACE_NAVY, linewidth=2, 
-                           alpha=0.3, transform=ax.transAxes, zorder=1)
+    for metric in row4_metrics:
+        ax = fig.add_subplot(metric['pos'])
+        ax.axis('off')
+        
+        # White background with border
+        rect = plt.Rectangle((0.05, 0.15), 0.9, 0.7, 
+                           facecolor='white', edgecolor='black', linewidth=2,
+                           transform=ax.transAxes, zorder=1)
         ax.add_patch(rect)
         
-        ax.text(metric['x'], 0.47, metric['icon'], ha='center', va='center', 
-                fontsize=28, transform=ax.transAxes)
-        ax.text(metric['x'], 0.41, metric['value'], ha='center', va='center', 
-                fontsize=28, weight='bold', color=PACE_NAVY, fontfamily='sans-serif',
+        ax.text(0.5, 0.65, metric['value'], ha='center', va='center', 
+                fontsize=44, weight='bold', color=metric['color'], fontfamily='sans-serif',
                 transform=ax.transAxes)
-        ax.text(metric['x'], 0.37, metric['label'], ha='center', va='center', 
-                fontsize=12, weight='bold', color=PACE_BLUE, fontfamily='sans-serif',
+        ax.text(0.5, 0.42, metric['label'], ha='center', va='center', 
+                fontsize=14, weight='bold', color=PACE_NAVY, fontfamily='sans-serif',
                 transform=ax.transAxes)
+        if metric['detail']:
+            ax.text(0.5, 0.25, metric['detail'], ha='center', va='center', 
+                    fontsize=10, color='#555555', fontfamily='sans-serif',
+                    transform=ax.transAxes)
     
-    # Model comparison mini-chart
-    ax_mini = fig.add_axes([0.15, 0.05, 0.7, 0.20])
-    models = ['XGBoost', 'Random Forest', 'Logistic Reg.']
-    scores = [92.41, 92.08, 88.20]
-    colors = [PACE_NAVY, PACE_BLUE, PACE_BLUE_LIGHT]
-    
-    bars = ax_mini.barh(models, scores, color=colors, edgecolor='black', linewidth=1.5)
-    for bar, score in zip(bars, scores):
-        width = bar.get_width()
-        ax_mini.text(width + 0.5, bar.get_y() + bar.get_height()/2, 
-                    f'{score}%', ha='left', va='center', fontsize=12, weight='bold')
-    
-    ax_mini.set_xlim(85, 96)
-    ax_mini.set_xlabel('ROC-AUC Score (%)', fontsize=11, weight='bold')
-    ax_mini.set_title('Model Comparison', fontsize=13, weight='bold', color=PACE_NAVY)
-    ax_mini.spines['top'].set_visible(False)
-    ax_mini.spines['right'].set_visible(False)
-    ax_mini.grid(axis='x', alpha=0.3, linestyle='--')
-    
-    # Title
-    fig.text(0.5, 0.97, 'Performance Metrics Dashboard', ha='center', va='top',
-            fontsize=26, weight='bold', color=PACE_NAVY, fontfamily='sans-serif')
-    
+    plt.savefig(output_dir / 'chart8_metrics_dashboard.svg', bbox_inches='tight',
+                facecolor='white', edgecolor='none', pad_inches=0.2, format='svg')
     plt.savefig(output_dir / 'chart8_metrics_dashboard.png', dpi=300, bbox_inches='tight',
-                facecolor='white', edgecolor='none')
-    print("✅ Chart 8 saved: Performance Metrics Dashboard")
+                facecolor='white', edgecolor='none', pad_inches=0.2)
+    print("✅ Chart 8 saved: Professional Metrics Dashboard (SVG + PNG)")
     plt.close()
 
 def main():

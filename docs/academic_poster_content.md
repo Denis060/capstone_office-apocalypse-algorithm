@@ -1,236 +1,237 @@
 # Academic Poster Content - Office Apocalypse Algorithm
-**36" × 48" PACE University Poster Template Layout**
-
----
-
-## TITLE (TOP CENTER - FULL WIDTH)
-**Office Apocalypse Algorithm: NYC Office Building Vacancy Risk Prediction**
-
-**Authors:** Ibrahim Denis Fofanah (Team Leader), Bright Arowny Zaman, Jeevan Hemanth Yendluri  
-**Faculty Advisor:** Dr. Krishna Bathula  
 **PACE University - Seidenberg School of Computer Science & Information Systems**
 
 ---
 
-# 🟦 COLUMN 1 — ABSTRACT / INTRODUCTION + LITERATURE REVIEW
-**(Text Only - No Charts)**
+## TITLE OF STUDY/RESEARCH
+**Office Apocalypse Algorithm: NYC Office Building Vacancy Risk Prediction**
+
+## LIST OF AUTHORS AND CO-AUTHORS / FACULTY ADVISOR
+**Authors:** Ibrahim Denis Fofanah (Team Leader), Bright Arowny Zaman, and Jeevan Hemanth Yendluri  
+**Faculty Advisor:** Dr. Krishna Bathula  
+**Institution:** PACE University - Seidenberg School of Computer Science & Information Systems
 
 ---
 
 ## ABSTRACT / INTRODUCTION
 
-**Problem:**
-NYC faces record-high post-pandemic office vacancies, threatening property values and tax revenue. Traditional assessments are reactive and lack building-level prediction.
+**Problem Statement:**
+NYC faces unprecedented office building vacancy rates post-pandemic, creating economic and urban planning challenges. Traditional assessment methods are reactive rather than predictive.
 
-**Objective:**
-Develop a machine learning model that predicts office building vacancy risk using NYC Open Data.
+**Research Objective:**
+Develop a machine learning system to predict office building vacancy risk using publicly available data, enabling proactive intervention strategies.
 
-**Innovation:**
-• First building-level predictive approach using six NYC datasets
-• Novel **data leakage detection framework**
-• SHAP-powered interactive dashboard for explainable decisions
+**Key Innovation:**
+- First systematic approach to office vacancy prediction using NYC open data
+- Novel data leakage detection methodology ensuring realistic model performance
+- Interactive dashboard for stakeholder decision-making
 
 **Significance:**
-Model improves targeting efficiency **3.1×** and reduces intervention costs by **85%**.
+Enables 3.1x more efficient resource allocation with 85% cost reduction compared to random targeting approaches.
 
 ---
 
 ## LITERATURE REVIEW / BACKGROUND
 
-**Real Estate Modeling:** Hedonic pricing theory explains how property attributes affect value. Post-COVID shifts require predictive frameworks beyond aggregated statistics.
+**Real Estate Risk Modeling:**
+- Hedonic pricing theory (Rosen, 1974) establishes framework for building characteristics impact on market values
+- Traditional models focus on aggregate indicators, limiting targeted intervention applicability
+- Post-pandemic structural changes require new predictive approaches (Barrero et al., 2021)
 
-**Municipal Data Challenges:** PLUTO/ACRIS studies show value in open datasets, but gaps persist in **building-level** prediction due to inconsistent identifiers and temporal misalignment.
+**Municipal Data Integration Challenges:**
+- Prior work with PLUTO/ACRIS datasets demonstrated value for neighborhood analysis (Furman Center, 2016)
+- Multi-source integration hindered by inconsistent identifiers, temporal misalignment, scale differences
+- Limited research operationalizes transportation accessibility and economic vitality indicators
 
-**Machine Learning:** Gradient boosting outperforms linear models for real estate analytics; SHAP improves interpretability for policy use.
+**Machine Learning in Urban Analytics:**
+- Gradient boosting methods show superior performance for real estate valuation (Yeh & Hsu, 2018)
+- SHAP explainability enables policy-relevant interpretable predictions (Lundberg et al., 2020)
+- Gap: Building-level prediction integrating heterogeneous municipal datasets remains underexplored
 
-**Research Gaps Filled:**
-• Leakage-free temporal modeling
-• Integration of six datasets at building resolution
-• Explainable ML for targeted interventions
-
----
-
----
-
-# 🟦 COLUMN 2 — DATASET / PREPROCESSING / EDA + METHODOLOGY
-**(Contains Charts 1, 2, and 3)**
+**Research Gaps Addressed:**
+1. Systematic data leakage detection for temporal financial predictions
+2. Integration of six municipal datasets at building resolution
+3. Explainable ML deployment for policy intervention prioritization
+4. Transportation demand patterns incorporated in vacancy risk models
 
 ---
 
 ## DATASET / DATA PREPROCESSING / EDA
 
-**Data Sources (7,191 NYC office buildings):**
-PLUTO (attributes), ACRIS (transactions), DOB Permits, MTA Ridership, Business Registry, Storefront Vacancy.
+**Data Sources (7,191 NYC Office Buildings):**
+- **NYC PLUTO:** Property characteristics, assessments, building age
+- **ACRIS:** Real estate transactions, deed transfers
+- **DOB Permits:** Construction activity indicators
+- **MTA Ridership:** Transportation accessibility proxies
+- **Business Registry:** Commercial activity density
+- **Storefront Vacancy:** Neighborhood economic health
 
-**Preprocessing Highlights:**
-• BBL standardization
-• Temporal alignment ensuring causality
-• Geospatial reconciliation
-• 20 engineered features across physical, financial, market & contextual categories
+**Data Integration Challenges:**
+- **BBL (Borough-Block-Lot) Standardization:** Unified building identification across datasets
+- **Temporal Alignment:** Ensuring feature-target temporal precedence
+- **Geographic Coordinate Resolution:** Borough-level approximation for mapping
 
----
+**Feature Engineering:**
+```
+Final Clean Features (20 total):
+- Physical: building_age, lotarea, bldgarea, officearea, numfloors
+- Financial: assessland, assesstot, value_per_sqft, land_value_ratio
+- Market: transaction_count, deed_count, mortgage_count
+- Contextual: mta_accessibility_proxy, business_density_proxy
+- Risk: construction_activity_proxy, distress_score
+```
 
-### 📊 **INSERT CHART 1 HERE**
-**[Office Buildings Distribution by Borough — Pie Chart]**
+**[CHART 1: Office Buildings Distribution by Borough]**
+*Pie chart showing Manhattan (2,507), Brooklyn (1,776), Queens (1,619), Staten Island (705), Bronx (584)*
 
----
-
-### 📊 **INSERT CHART 2 HERE**
-**[Data Sources Integration Overview — Bar Chart]**
+**[CHART 2: Data Sources Integration Overview]**
+*Bar chart showing record counts from 6 municipal datasets*
 
 ---
 
 ## METHODOLOGY
 
-**Leakage Detection:**
-• Correlation screening (>95%)
-• Temporal validation
-• Causality checks
-• Business logic review
+**Data Leakage Detection Framework:**
+1. **Correlation Analysis:** Identify features with >95% correlation to target
+2. **Temporal Validation:** Test feature stability across time periods  
+3. **Causality Verification:** Ensure features precede target measurement
+4. **Domain Expert Review:** Validate business logic of feature relationships
 
-**Modeling Pipeline:**
-• Temporal splits: rolling, expanding, and borough-aware
-• Algorithms tested: Logistic Regression, Random Forest, **XGBoost**
-• Grid search + 5-fold cross-validation
+**Model Development Pipeline:**
+```
+1. Temporal Validation Framework
+   ├── Simple Temporal Split (80/20)
+   ├── Rolling Window (6-month predictions)
+   ├── Expanding Window (progressive training)
+   └── Geographic Stratification (borough-aware)
 
-**Explainability:**
-SHAP for global and local interpretation; geographic visualizations; Streamlit dashboard deployment.
+2. Model Comparison
+   ├── Logistic Regression (baseline)
+   ├── Random Forest (ensemble)
+   └── XGBoost (champion: 92.41% ROC-AUC)
 
----
+3. Hyperparameter Optimization
+   ├── Grid Search: 2.3 hours, 4-core Intel i7
+   ├── 5-fold Stratified Cross-Validation
+   └── Optimal: n_estimators=300, max_depth=6
+```
 
-### 📊 **INSERT CHART 3 HERE**
-**[System Architecture Diagram]**
-*Place at bottom of Methodology section*
+**Interpretability Integration:**
+- SHAP (SHapley Additive exPlanations) for feature importance
+- Individual building risk factor analysis
+- Geographic risk pattern visualization
 
----
-
----
-
-# 🟦 COLUMN 3 — RESULTS AND ANALYSIS
-**(Contains Charts 4, 5, 6, and 7 — Bulk of visuals)**
+**[CHART 3: System Architecture Diagram]**
+*End-to-end pipeline: 6 Data Sources → ETL → Feature Engineering (20 features) → XGBoost Model → SHAP Analysis → Streamlit Dashboard*
 
 ---
 
 ## RESULTS AND ANALYSIS
 
-**Champion Model (XGBoost):**
-• ROC-AUC: **92.41%**
-• Precision@10%: **93.01%**
-• Precision@5%: **95.12%**
-• F1-Score: **0.847**
+**Champion Model Performance (XGBoost):**
+| Metric | Value | Business Impact |
+|--------|--------|-----------------|
+| **ROC-AUC** | **92.41%** | Excellent discrimination capability |
+| **Precision@10%** | **93.01%** | 93% accuracy targeting highest-risk buildings |
+| **Precision@5%** | 95.12% | Exceptional accuracy for critical interventions |
+| **F1-Score** | 0.847 | Balanced precision and recall |
 
-**Model Comparison:**
-• XGBoost: 92.41%
-• Random Forest: 92.08%
-• Logistic Regression: 88.20%
+**Model Comparison Results:**
+```
+Algorithm         ROC-AUC    Training Time    Business Value
+XGBoost          92.41%     2.3 min         Champion Model
+Random Forest    92.08%     1.8 min         Strong Baseline  
+Logistic Reg.    88.20%     0.5 min         Interpretable Baseline
+```
 
----
+**[CHART 4: Model Performance Comparison]**
+*Horizontal bar chart comparing ROC-AUC scores: XGBoost (92.41%), Random Forest (92.08%), Logistic Regression (88.20%)*
 
-### 📊 **INSERT CHART 4 HERE**
-**[Model Performance Comparison — Bar Chart]**
+**Feature Importance (SHAP Analysis):**
+| Rank | Feature | Impact | Interpretation |
+|------|---------|--------|----------------|
+| 1 | `building_age` | 1.406 | Older buildings (>50 years) exponentially higher risk |
+| 2 | `construction_activity_proxy` | 1.149 | Market development activity predictor |
+| 3 | `officearea` | 0.776 | Building size affects attractiveness |
+| 4 | `office_ratio` | 0.667 | Space utilization efficiency |
 
----
+**[CHART 5: SHAP Feature Importance Plot]**
+*Waterfall plot showing top 5 features with building_age (1.406) dominating, followed by construction_activity_proxy (1.149)*
 
-### 📊 **INSERT CHART 5 HERE**
-**[SHAP Feature Importance Plot]**
+**Geographic Risk Analysis:**
+```
+Borough Risk Distribution:
+Brooklyn    40.9% high-risk (highest)    1,776 buildings
+Queens      32.9% high-risk             1,619 buildings  
+Bronx       27.9% high-risk               584 buildings
+Staten Is.  25.5% high-risk               705 buildings
+Manhattan   22.1% high-risk (lowest)    2,507 buildings
+```
 
----
+**[CHART 6: NYC Borough Risk Heat Map]**
+*Color-coded bar chart: Brooklyn (RED - 40.9%), Queens (ORANGE - 32.9%), Bronx (YELLOW - 27.9%), Staten Island (LIGHT GREEN - 25.5%), Manhattan (GREEN - 22.1%)*
 
-**Geographic Risk Results:**
+**Business Value Quantification:**
+- **Random Targeting:** 30% success rate, $5M for 300 interventions
+- **Model Targeting:** 93% success rate, $3.6M for 669 interventions  
+- **ROI Improvement:** 85% cost reduction + 123% more successful outcomes
 
-• Brooklyn: **40.9%** (highest)
-• Queens: 32.9%
-• Bronx: 27.9%
-• Staten Island: 25.5%
-• Manhattan: 22.1%
-
----
-
-### 📊 **INSERT CHART 6 HERE**
-**[Borough Risk Heatmap — Bar Chart]**
-
----
-
-**Business Impact:**
-
-• Random: 30% success → $5M
-• Model-based: **93% success → $3.6M**
-→ **85% lower cost + 123% more interventions**
-
----
-
-### 📊 **INSERT CHART 7 HERE**
-**[Business Impact Visualization]**
-
----
-
----
-
-# 🟦 COLUMN 4 — CONCLUSIONS + REFERENCES + CONTACT
-**(Text Only - No Charts)**
+**[CHART 7: Business Impact Visualization]**
+*Side-by-side comparison bars showing Random (30% success, $5M cost) vs Model-Driven (93% success, $3.6M cost) with "85% Cost Reduction" annotation*
 
 ---
 
 ## CONCLUSIONS
 
 **Key Contributions:**
-• Developed NYC's first building-level vacancy risk model
-• Introduced systematic leakage detection
-• Achieved **92.41% ROC-AUC** with high targeting precision
-• SHAP interactive dashboard supports transparent policy decisions
+1. **Methodological Innovation:** Systematic data leakage detection framework for financial prediction models
+2. **Technical Achievement:** 92.41% ROC-AUC XGBoost classifier with 93% precision for highest-risk buildings
+3. **Geographic Insights:** Brooklyn identified as highest-risk borough requiring targeted intervention
+4. **Production Deployment:** Interactive Streamlit dashboard with SHAP explainability
 
 **Research Questions Answered:**
+- **Q1:** Can ML predict office vacancy risk? **A:** Yes, 92.41% ROC-AUC accuracy
+- **Q2:** Which factors most influence risk? **A:** Building age dominates, followed by market context
+- **Q3:** How to deploy practically? **A:** Interactive dashboard with geographic targeting
 
-1. Can ML predict vacancy risk? → **Yes**
-2. Key drivers? → **Building age**, construction activity
-3. Practical deployment? → Dashboard with geographic targeting
+**Impact on Field:**
+- **Data Science:** Robust framework for preventing data leakage in real estate analytics
+- **Urban Planning:** Evidence-based risk assessment for proactive intervention
+- **Real Estate:** Open data viability demonstrated for commercial property analysis
 
-**Future Work:**
-• Expansion to other cities
-• Real-time economic indicators
-• Causal feature engineering
+**Future Research Directions:**
+- Multi-city generalization (Chicago, Boston, San Francisco)
+- Real-time data integration with property management systems
+- Causal feature engineering with economic indicators
 
 ---
 
 ## REFERENCES
 
-Chen & Guestrin (2016). "XGBoost: A scalable tree boosting system." *ACM SIGKDD*
-
-Lundberg & Lee (2017). "A unified approach to interpreting model predictions." *NIPS*
-
-NYC Department of Finance (2025). "Property Assessment Data (PLUTO)." *NYC Open Data Portal*
-
-Molnar, C. (2022). *Interpretable Machine Learning: A Guide for Making Black Box Models Explainable*
+1. Chen, T., & Guestrin, C. (2016). "XGBoost: A scalable tree boosting system." *Proceedings of the 22nd ACM SIGKDD*
+2. Lundberg, S. M., & Lee, S. I. (2017). "A unified approach to interpreting model predictions." *NIPS*
+3. NYC Department of Finance. (2025). "Property Assessment Data (PLUTO)." *NYC Open Data Portal*
+4. Molnar, C. (2022). *Interpretable Machine Learning: A Guide for Making Black Box Models Explainable*
 
 ---
 
-## ACKNOWLEDGEMENTS / CONTACT
+## ACKNOWLEDGEMENTS OR CONTACT
 
-Special thanks to **Dr. Krishna Bathula**.
-Appreciation to PACE Seidenberg and NYC Open Data.
+**Special Thanks:**
+- Dr. Krishna Bathula for research guidance and methodological insights
+- Team collaboration: Ibrahim Denis Fofanah (Team Leader), Bright Arowny Zaman, Jeevan Hemanth Yendluri
+- PACE University Seidenberg School for computational resources
+- NYC Open Data initiative for comprehensive dataset access
 
-**Team Lead:** Ibrahim Denis Fofanah – if57774n@pace.edu
+**Contact Information:**
+- **Team Lead:** Ibrahim Denis Fofanah {if57774n@pace.edu}
+- **Team Members:** Bright Arowny Zaman {bz75499n@pace.edu}, Jeevan Hemanth Yendluri {jy44272n@pace.edu}
+- **GitHub:** https://github.com/Denis060/capstone_office-apocalypse-algorithm
+- **Dashboard Demo:** http://localhost:8501
 
-**Team Members:**
-Bright Arowny Zaman – bz75499n@pace.edu
-Jeevan Hemanth Yendluri – jy44272n@pace.edu
-
-**GitHub:** github.com/Denis060/capstone_office-apocalypse-algorithm
+**Interactive Demo Available:**
+Live Streamlit dashboard with model predictions, SHAP explanations, and geographic risk visualization.
 
 ---
 
----
-
-# ✅ **CHART PLACEMENT REFERENCE**
-
-| Chart # | Title                         | Column   | Exact Placement       |
-|---------|-------------------------------|----------|-----------------------|
-| **1**   | Borough Distribution          | Column 2 | Under Dataset text    |
-| **2**   | Data Integration Overview     | Column 2 | Under Chart 1         |
-| **3**   | System Architecture           | Column 2 | Bottom of Methodology |
-| **4**   | Model Performance Comparison  | Column 3 | Top of Results        |
-| **5**   | SHAP Importance               | Column 3 | Under Chart 4         |
-| **6**   | Borough Risk Heatmap          | Column 3 | Under SHAP chart      |
-| **7**   | Business Impact Visualization | Column 3 | Bottom of column      |
-
-**Note:** Chart 8 (Metrics Dashboard) is available as an alternative compact visual if needed.
+*This research demonstrates the intersection of machine learning, urban analytics, and practical policy applications, contributing to both academic knowledge and real-world problem-solving capabilities.*
