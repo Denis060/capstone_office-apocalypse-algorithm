@@ -88,6 +88,13 @@ Standard k-fold cross-validation proves inadequate for time-series prediction ta
 
 Three algorithms underwent systematic comparison: Logistic Regression as the interpretable baseline, Random Forest for ensemble robustness, and XGBoost for state-of-the-art gradient boosting performance. Hyperparameter optimization employed grid search with 5-fold cross-validation over 72 parameter combinations for XGBoost, requiring 2.3 hours on a 4-core Intel i7 processor. Final model selection prioritized ROC-AUC (Receiver Operating Characteristic Area Under Curve) as the primary metric with secondary consideration for Precision@10\% to evaluate business-relevant targeting accuracy.
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\textwidth]{../figures/poster_charts/chart3_system_architecture.png}
+\caption{End-to-end system architecture showing data ingestion, ETL pipeline, model training, SHAP interpretability, and production deployment modules.}
+\label{fig:architecture}
+\end{figure}
+
 \subsection*{Data Sources and Integration}
 
 Six distinct NYC Open Data sources provide complementary perspectives on office building characteristics and neighborhood context. NYC PLUTO provides annual property assessment database with building physical characteristics, assessed valuations, and land use classifications. The 2025 version 2.1 release contains comprehensive coverage of 7,191 office buildings identified through land use codes. ACRIS documents all real estate transactions, providing market activity proxies through aggregated transaction counts. DOB permit records indicate construction and renovation activity, with permit counts providing neighborhood-level development signals. MTA subway ridership statistics enable transportation accessibility analysis through proximity-based scoring. NYC Business Registry enables commercial density calculations within radius buffers. Storefront vacancy reports provide ground-level validation of neighborhood commercial health.
@@ -117,6 +124,13 @@ Temporal validation confirms performance stability across multiple validation st
 
 Statistical significance testing through bootstrap resampling generates 95\% confidence intervals: ROC-AUC [91.7\%, 93.1\%], Precision@10\% [91.2\%, 94.8\%]. McNemar's test yields p < 0.001, confirming performance differences exceed random variation.
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{../figures/poster_charts/chart4_model_comparison.png}
+\caption{Model performance comparison showing XGBoost achieving 92.41\% ROC-AUC, outperforming Random Forest (92.08\%) and Logistic Regression (88.20\%).}
+\label{fig:model_comparison}
+\end{figure}
+
 \subsection*{Feature Importance Analysis}
 
 SHAP analysis provides quantitative feature importance rankings with direct business interpretability. Building age emerges as the dominant risk factor with SHAP importance 1.406, substantially exceeding all other features. Buildings exceeding 50 years old show 2.3× higher vacancy rates compared to buildings under 20 years old, reflecting modernization challenges including outdated HVAC systems, limited electrical capacity, and layouts incompatible with contemporary office preferences. Construction activity proxy ranks second (1.149 SHAP importance) capturing neighborhood-level market development patterns. Office area (0.776 SHAP) indicates larger buildings face elevated risk. Office ratio (0.667) and commercial ratio (0.568) round out the top five predictors.
@@ -129,6 +143,13 @@ Borough-level analysis reveals significant geographic variation. Brooklyn emerge
 
 Geographic risk clustering identifies high-risk concentration zones requiring targeted intervention. Brooklyn's Downtown Brooklyn, Sunset Park, and Bushwick show 55\%+ high-risk rates warranting focused economic development. Queens' Long Island City exhibits 38\% high-risk rate despite recent development. Bronx's Grand Concourse corridor shows 42\% high-risk rate requiring transportation and modernization investments.
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{../figures/poster_charts/chart6_borough_risk.png}
+\caption{Geographic risk distribution across NYC boroughs showing Brooklyn with highest vacancy risk (40.9\%) and Manhattan with lowest (22.1\%).}
+\label{fig:borough_risk}
+\end{figure}
+
 \subsection*{Business Impact Validation}
 
 Model-driven targeting at 10\% threshold achieves 93.01\% success rate compared to 30\% baseline random targeting, representing 2.23× efficiency improvement. This translates to 669 successful high-risk building identifications from assessing only 719 buildings, compared to 300 successes from 1,000 random assessments. The model enables 123\% more successful interventions (369 additional high-risk buildings) while assessing 28\% fewer properties.
@@ -136,6 +157,13 @@ Model-driven targeting at 10\% threshold achieves 93.01\% success rate compared 
 Cost efficiency improves dramatically from \$16,667 cost per success under random targeting to \$5,373 per success using model targeting, representing 68\% cost reduction. This \$11,294 per-success savings accumulates to \$1.4 million total cost reduction on 1,000-building assessment cycle. For NYC's approximately 50,000 office buildings, city-wide deployment would generate \$70 million annual savings from optimized assessment resource allocation.
 
 Return on investment analysis demonstrates compelling business case. Assuming \$100,000 development cost and \$20,000 annual maintenance, the \$1.4 million per-cycle savings yields 14:1 first-year ROI. Payback period extends to only 2.7 months assuming quarterly assessment cycles, validating economic viability.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\textwidth]{../figures/poster_charts/chart8_metrics_dashboard.png}
+\caption{Comprehensive metrics dashboard displaying model performance (92.41\% ROC-AUC), business impact (\$1.4M savings, 2.23× efficiency), and operational metrics.}
+\label{fig:metrics_dashboard}
+\end{figure}
 
 \subsection*{Model Calibration and Deployment Readiness}
 
