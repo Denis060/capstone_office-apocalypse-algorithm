@@ -16,20 +16,20 @@ The Office Apocalypse Algorithm is a production-ready machine learning framework
 
 ---
 
-## 🎯 Current Project Status (November 30, 2025)
+## Current Project Status (November 30, 2025)
 
-### ✅ COMPLETE - Final Submission Ready
+### COMPLETE - Final Submission Ready
 
-- ✅ **Champion Model Deployed**: XGBoost achieving **92.41% ROC-AUC** (vs 88.2% baseline)
-- ✅ **Production Dashboard**: Streamlit app with SHAP interpretability deployed
-- ✅ **IEEE Technical Paper**: Complete conference paper (LaTeX + Markdown)
-- ✅ **Academic Poster**: Full content with 7 professional visualizations
-- ✅ **Data Leakage Eliminated**: Systematic validation ensuring realistic performance
-- ✅ **Comprehensive Documentation**: Professor-ready materials and submission package
+- **Champion Model Deployed**: XGBoost achieving **92.41% ROC-AUC** (vs 88.2% baseline)
+- **Production Dashboard**: Streamlit app with SHAP interpretability deployed
+- **IEEE Technical Paper**: Complete conference paper (LaTeX + Markdown)
+- **Academic Poster**: Full content with 7 professional visualizations
+- **Data Leakage Eliminated**: Systematic validation ensuring realistic performance
+- **Comprehensive Documentation**: Professor-ready materials and submission package
 
 ---
 
-## 🏆 Final Model Performance
+## Final Model Performance
 
 ### Champion Model: XGBoost Ensemble
 - **ROC-AUC**: **92.41%** (excellent discrimination)
@@ -126,7 +126,7 @@ office_apocalypse_algorithm_project/
 - **Temporal alignment**: Common reference periods across datasets
 - **Quality validation**: Cross-dataset consistency checks
 
-## 🎓 Key Project Achievements
+## Key Project Achievements
 
 ### 1. Champion Model Development
 - **XGBoost Excellence**: 92.41% ROC-AUC outperforming baseline by 4.2 percentage points
@@ -152,7 +152,7 @@ office_apocalypse_algorithm_project/
 - **Risk Scoring**: Calibrated probabilities enabling prioritized interventions
 - **Operational Dashboard**: Interactive tool for building-level risk assessment
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Python 3.11+
@@ -190,7 +190,7 @@ python scripts/generate_poster_charts.py
 python scripts/shap_model_interpretation.py
 ```
 
-### 📊 View Key Deliverables
+### View Key Deliverables
 
 **Technical Documentation**
 - IEEE Paper (LaTeX): `docs/ieee_conference_paper_final.tex`
@@ -206,7 +206,7 @@ python scripts/shap_model_interpretation.py
 - Poster Charts: `figures/poster_charts/` (7 professional charts)
 - Dashboard: Run `streamlit run dashboard/app.py`
 
-## 📈 Model Comparison
+## Model Comparison
 
 | Model | ROC-AUC | Accuracy | Precision@10% | F1-Score |
 |-------|---------|----------|---------------|----------|
@@ -218,7 +218,7 @@ python scripts/shap_model_interpretation.py
 
 ---
 
-## 🏛️ Academic Context
+## Academic Context
 
 ### Capstone Project - Data Science Program
 **Institution**: PACE University  
@@ -229,15 +229,15 @@ python scripts/shap_model_interpretation.py
 - Jeevan Hemanth Yendluri
 
 ### Project Demonstrates
-- ✅ **Data Science Methodology**: Systematic leakage detection, temporal validation, rigorous evaluation
-- ✅ **Machine Learning Engineering**: Production-ready models with SHAP interpretability
-- ✅ **Policy Applications**: Geographic insights for NYC municipal decision-making
-- ✅ **Technical Communication**: IEEE paper, academic poster, comprehensive documentation
-- ✅ **Business Impact**: Quantified efficiency gains and cost reduction metrics
+- **Data Science Methodology**: Systematic leakage detection, temporal validation, rigorous evaluation
+- **Machine Learning Engineering**: Production-ready models with SHAP interpretability
+- **Policy Applications**: Geographic insights for NYC municipal decision-making
+- **Technical Communication**: IEEE paper, academic poster, comprehensive documentation
+- **Business Impact**: Quantified efficiency gains and cost reduction metrics
 
 ---
 
-## 📚 Key Technologies
+## Key Technologies
 
 **Machine Learning**: XGBoost, scikit-learn, SHAP  
 **Data Processing**: pandas, NumPy  
@@ -247,7 +247,7 @@ python scripts/shap_model_interpretation.py
 
 ---
 
-## 🛠️ Development Methodology
+## Development Methodology
 
 ### Modern Development Practices
 
@@ -315,7 +315,7 @@ Our team is prepared to defend this work by:
 
 ---
 
-## 📝 Citation
+## Citation
 
 If you use this work, please cite:
 
@@ -331,7 +331,7 @@ If you use this work, please cite:
 
 ---
 
-## 📧 Contact & Links
+## Contact & Links
 
 **GitHub Repository**: [https://github.com/Denis060/capstone_office-apocalypse-algorithm](https://github.com/Denis060/capstone_office-apocalypse-algorithm)  
 **Project Lead**: Ibrahim Denis Fofanah  
@@ -339,7 +339,7 @@ If you use this work, please cite:
 
 ---
 
-## 📄 License
+## License
 
 This project is developed for academic purposes as part of a capstone requirement at PACE University.
 
