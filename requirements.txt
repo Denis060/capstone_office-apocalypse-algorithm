@@ -1,44 +1,49 @@
-# Office Apocalypse Algorithm - Requirements
+# Office Apocalypse Algorithm - Production Requirements
 # NYC Office Building Vacancy Risk Prediction System
-# Python 3.12+ required
+# Python 3.11+ required
+# Last Updated: December 8, 2025
 
-# Core Data Science Libraries
-pandas>=2.3.3
-numpy>=2.3.3
-scikit-learn>=1.7.2
-scipy>=1.16.2
-joblib>=1.5.2
+# Core Machine Learning Stack
+pandas>=2.3.3          # Data manipulation and analysis
+numpy>=2.3.3           # Numerical computing
+scikit-learn>=1.7.2    # Machine learning algorithms and validation
+scipy>=1.16.2          # Scientific computing utilities
+joblib>=1.5.2          # Model serialization and parallel processing
 
-# Visualization Libraries
-matplotlib>=3.10.6
-seaborn>=0.13.2
-plotly>=6.3.1
-folium>=0.20.0
+# Data Visualization
+matplotlib>=3.10.6     # Static plots and charts
+seaborn>=0.13.2        # Statistical data visualization
+plotly>=6.3.1          # Interactive visualizations for dashboard
+folium>=0.20.0         # Interactive geospatial mapping
 
-# Geospatial Analysis
-geopandas>=1.1.1
-shapely>=2.1.2
-pyproj>=3.7.2
-pyogrio>=0.11.1
+# Geospatial Analysis (NYC building-level integration)
+geopandas>=1.1.1       # Geospatial data structures and operations
+shapely>=2.1.2         # Geometric object manipulation
+pyproj>=3.7.2          # Coordinate reference system transformations
+pyogrio>=0.11.1        # Fast I/O for geospatial formats
 
-# Jupyter Environment
-jupyter>=1.1.1
-notebook>=7.4.7
-jupyterlab>=4.4.9
-ipykernel>=6.30.1
-ipython>=9.6.0
+# Jupyter Environment (for exploratory data analysis)
+jupyter>=1.1.1         # Jupyter metapackage
+notebook>=7.4.7        # Classic Jupyter Notebook interface
+jupyterlab>=4.4.9      # JupyterLab IDE environment
+ipykernel>=6.30.1      # IPython kernel for Jupyter
+ipython>=9.6.0         # Enhanced Python interactive shell
 
-# Development Tools
-pytest>=7.0.0
-black>=23.0.0
-flake8>=6.0.0
+# Code Quality and Testing
+pytest>=7.0.0          # Testing framework
+black>=23.0.0          # Code formatter
+flake8>=6.0.0          # Linting and style checking
 
-# Additional Utilities
-requests>=2.32.5
-python-dateutil>=2.9.0
-pytz>=2025.2
-tzdata>=2025.2
+# Utility Libraries
+requests>=2.32.5       # HTTP library for data fetching
+python-dateutil>=2.9.0 # Date/time utilities
+pytz>=2025.2           # Timezone definitions
+tzdata>=2025.2         # Timezone database
 
-# Environment Management
-pip>=24.3.1
-setuptools>=80.9.0
+# Package Management
+pip>=24.3.1            # Package installer
+setuptools>=80.9.0     # Build system utilities
+
+# Model Interpretability (SHAP analysis)
+# Note: Install separately if needed - may require specific version for XGBoost compatibility
+# shap>=0.44.0
