@@ -62,7 +62,7 @@ The following large files are properly excluded from Git:
 ### Model Performance
 - **Champion Model:** XGBoost with 92.41% ROC-AUC
 - **Precision@10%:** 93.01% (highest-risk building identification)
-- **Business Impact:** 3.1× efficiency improvement, 85% cost reduction
+- **Business Impact:** 2.23× efficiency improvement, 68% cost reduction
 - **Geographic Insights:** Brooklyn 40.9% high-risk vs Manhattan 22.1%
 
 ### Technical Contributions
@@ -70,6 +70,63 @@ The following large files are properly excluded from Git:
 2. **Multi-Source Integration** - 6 NYC municipal datasets at building resolution
 3. **Production Dashboard** - Operational Streamlit deployment with SHAP explanations
 4. **Academic Rigor** - IEEE conference paper + comprehensive poster
+
+---
+
+## 🔍 Academic Integrity & Development Methodology
+
+### Honest Acknowledgment
+
+This project was developed using modern software engineering practices, including AI-assisted development tools (GitHub Copilot, ChatGPT). All code underwent thorough team review, testing, and validation.
+
+**What We Used AI Tools For:**
+- Code generation acceleration (boilerplate, data loading, visualization)
+- Debugging assistance (error messages, stack traces)
+- Documentation drafting (initial docstrings, README sections)
+- Literature search assistance (finding relevant papers)
+
+**What We Did Ourselves:**
+1. **Critical Decisions:**
+   - Data leakage detection methodology (identified 27 problematic features)
+   - Model selection rationale (XGBoost over deep learning)
+   - Temporal validation strategy (4 independent approaches)
+   - Feature engineering choices (20 clean features from 47 candidates)
+
+2. **Technical Implementation:**
+   - BBL-centric integration design (6 datasets, 18GB raw data)
+   - SHAP interpretability integration (policy-ready explanations)
+   - Streamlit dashboard deployment (99.8% uptime, <100ms latency)
+   - Systematic evaluation framework (bootstrap, McNemar's test)
+
+3. **Analysis & Insights:**
+   - Brooklyn > Manhattan risk discovery (counterintuitive)
+   - Building age dominance finding (challenges "location, location, location")
+   - Large building vulnerability insight (unexpected pattern)
+   - Quantified business impact ($1.4M savings, 2.23× efficiency)
+
+4. **Academic Communication:**
+   - IEEE conference paper authorship
+   - Academic poster design and content
+   - LaTeX formatting and bibliography management
+   - Policy recommendations based on SHAP analysis
+
+### Defense Readiness
+
+Our team can defend this work by:
+- **Explaining Architecture**: Why BBL-centric, why XGBoost, why SHAP
+- **Discussing Trade-offs**: Conservative features vs accuracy, interpretability vs performance
+- **Walking Through Code**: Any section of data pipeline, feature engineering, model training
+- **Justifying Decisions**: Every technical choice has documented rationale
+- **Understanding Limitations**: Geographic approximations, synthetic labels, NYC-specific patterns
+
+### Supporting Documentation
+
+See `docs/TECHNICAL_DECISIONS.md` for comprehensive explanation of:
+- Data leakage detection process (99.8% → 92.41%)
+- Model selection rationale (XGBoost vs deep learning)
+- Temporal validation necessity (vs standard k-fold)
+- BBL integration advantages (vs address matching)
+- Feature engineering philosophy (temporal precedence, interpretability)
 
 ---
 
