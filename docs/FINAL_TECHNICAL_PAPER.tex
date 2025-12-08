@@ -68,7 +68,7 @@ Traditional hedonic pricing models (Rosen 34) explain how building features affe
 
 Gradient boosting methods like XGBoost consistently outperform traditional regression (Chen and Guestrin 785). Random forests provide strong feature importance rankings. Deep learning hasn't gained traction due to limited training examples in city databases (Liu and Wu). The biggest literature problem is data leakage—researchers accidentally use information models shouldn't access, achieving 99\%+ accuracy that fails in practice.
 
-For government applications, interpretability matters. SHAP analysis (Lundberg et al.) explains predictions using game theory principles, providing both global feature importance and individual prediction explanations. Combined with interactive dashboards, SHAP makes complex models accessible to urban planners.
+For government applications, interpretability matters. SHAP analysis (Lundberg et al.) explains predictions using game theory principles, providing both global feature importance and individual prediction explanations. Modern interpretable machine learning frameworks (Molnar) emphasize the importance of combining technical accuracy with stakeholder understanding. Combined with interactive dashboards, SHAP makes complex models accessible to urban planners.
 
 Our work differs by: building systematic leakage detection, predicting at individual building level across 7,191 properties, and deploying a working system with built-in explanations. We deliberately used only legitimate predictors, even sacrificing accuracy, creating a methodology useful for other financial prediction problems.
 
@@ -211,6 +211,8 @@ This work transforms reactive assessment into proactive intervention, providing 
 \hangindent=0.5in Liu, Chengzhi, and Hao Wu. ``Machine Learning for Real Estate Price Prediction: A Survey.'' \textit{IEEE Access}, vol. 9, 2021, pp. 123457-123478.
 
 \hangindent=0.5in Lundberg, Scott M., et al. ``From Local Explanations to Global Understanding with Explainable AI for Trees.'' \textit{Nature Machine Intelligence}, vol. 2, no. 1, 2020, pp. 56-67.
+
+\hangindent=0.5in Molnar, Christoph. \textit{Interpretable Machine Learning: A Guide for Making Black Box Models Explainable}. 2nd ed., 2022, christophm.github.io/interpretable-ml-book/. Accessed 8 Dec. 2025.
 
 \hangindent=0.5in MTA. ``Subway Hourly Ridership Data 2020-2024.'' \textit{MTA Open Data}, 2025, data.ny.gov/. Accessed 20 Nov. 2025.
 
