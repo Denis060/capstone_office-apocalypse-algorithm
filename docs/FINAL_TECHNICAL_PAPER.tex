@@ -53,9 +53,9 @@ New York City's office buildings face serious post-pandemic vacancy challenges, 
 % Introduction
 \section*{Introduction}
 
-The COVID-19 pandemic created vacancy challenges threatening \$4.6 billion in NYC property tax revenue. Current assessment methods are reactive—agencies discover problems only after buildings are empty. We built the Office Apocalypse Algorithm to predict which buildings face trouble before vacancies occur.
+The COVID-19 pandemic created vacancy challenges threatening \$4.6 billion in NYC property tax revenue, with remote work patterns showing remarkable persistence (Barrero, Bloom, and Davis). Current assessment methods are reactive—agencies discover problems only after buildings are empty. We built the Office Apocalypse Algorithm to predict which buildings face trouble before vacancies occur.
 
-Our research question: Can publicly available NYC data accurately predict vacancy risk for individual buildings? We also identified which factors matter most and developed actionable recommendations for city planners.
+Our research addresses three questions: (1) Can machine learning reliably predict office building vacancy risk using municipal data? (2) Which building and contextual features drive vacancy risk? (3) How can such predictions be operationalized for policy intervention?
 
 We faced an important challenge called "data leakage"—when models accidentally use information they shouldn't have. This is common in real estate analytics where composite scores contain pieces of the answer you're predicting. Such models show 99\%+ accuracy on paper but fail in practice. We took a conservative approach, using only raw building characteristics that existed before vacancy outcomes. This methodology represents a key contribution for other prediction problems.
 
@@ -64,11 +64,11 @@ Our system achieved 92.41\% ROC-AUC across 7,191 buildings—the first building-
 % Literature Review
 \section*{Literature Review}
 
-Traditional hedonic pricing models (Rosen 34) explain how building features affect property values but can't predict future problems. Post-pandemic, we need predictive tools. NYC provides data through PLUTO and ACRIS, but most studies work at neighborhood or ZIP code level—insufficient for targeting specific buildings.
+Traditional hedonic pricing models (Rosen 34) explain how building features affect property values but can't predict future problems. Post-pandemic, we need predictive tools (Chapple et al.). NYC provides data through PLUTO and ACRIS, but most studies work at neighborhood or ZIP code level—insufficient for targeting specific buildings. Recent advances in urban data science demonstrate the potential of administrative data integration (Kontokosta and Johnson).
 
-Gradient boosting methods like XGBoost consistently outperform traditional regression (Chen and Guestrin 785). Random forests provide strong feature importance rankings. Deep learning hasn't gained traction due to limited training examples in city databases. The biggest literature problem is data leakage—researchers accidentally use information models shouldn't access, achieving 99\%+ accuracy that fails in practice (Smith and Williams 234-248).
+Gradient boosting methods like XGBoost consistently outperform traditional regression (Chen and Guestrin 785). Random forests provide strong feature importance rankings. Deep learning hasn't gained traction due to limited training examples in city databases (Liu and Wu). The biggest literature problem is data leakage—researchers accidentally use information models shouldn't access, achieving 99\%+ accuracy that fails in practice.
 
-For government applications, interpretability matters. SHAP analysis (Lundberg and Lee 4765) explains predictions using game theory principles. Molnar's interpretable machine learning guide has become the standard reference. Combined with interactive dashboards, SHAP makes complex models accessible to urban planners.
+For government applications, interpretability matters. SHAP analysis (Lundberg et al.) explains predictions using game theory principles, providing both global feature importance and individual prediction explanations. Combined with interactive dashboards, SHAP makes complex models accessible to urban planners.
 
 Our work differs by: building systematic leakage detection, predicting at individual building level across 7,191 properties, and deploying a working system with built-in explanations. We deliberately used only legitimate predictors, even sacrificing accuracy, creating a methodology useful for other financial prediction problems.
 
@@ -79,7 +79,7 @@ Our work differs by: building systematic leakage detection, predicting at indivi
 
 We used supervised machine learning for binary classification of NYC office building vacancy risk. Three main challenges: integrating misaligned city datasets, preventing data leakage, and ensuring model interpretability.
 
-Our six-stage pipeline covered data collection, feature engineering with leakage prevention, validation setup, model training, policy development, and production deployment. We integrated six NYC Open Data sources (building characteristics, sales records, permits, subway ridership, business registry, storefront vacancies) using PLUTO as the base for 7,191 buildings.
+Our six-stage pipeline covered data collection, feature engineering with leakage prevention, validation setup, model training, policy development, and production deployment. We integrated six NYC Open Data sources (building characteristics, sales records, permits, subway ridership, business registry, storefront vacancies) using PLUTO as the base for 7,191 buildings. Machine learning methods for economic applications require careful feature engineering and validation (Athey and Imbens).
 
 Initially we tried 47 features including composite scores like "investment potential." These achieved 99\%+ accuracy but contained data leakage—the scores used vacancy information we were predicting. We reduced to 20 raw features known to exist before outcomes: building age, square footage, assessed value, floors, transactions, and transit/neighborhood proxies.
 
@@ -159,7 +159,7 @@ Calibration metrics validate reliable predictions: Brier Score 0.089, Calibratio
 
 Our 92.41\% ROC-AUC demonstrates accurate vacancy prediction using public data, exceeding previous 78-82\% neighborhood-level studies at finer resolution. The 93.01\% Precision@10\% validates practical utility for resource-constrained planning.
 
-Building age dominance reveals NYC's vacancy challenge stems from aging infrastructure unsuited to post-pandemic needs. Pre-1975 buildings lack modern HVAC, electrical, and flexible layouts—suggesting mitigation requires capital investment in modernization, not just market solutions.
+Building age dominance reveals NYC's vacancy challenge stems from aging infrastructure unsuited to post-pandemic needs. Pre-1975 buildings lack modern HVAC, electrical, and flexible layouts—suggesting mitigation requires capital investment in modernization, not just market solutions. This finding aligns with economic research on housing supply constraints (Glaeser and Gyourko) and urban accessibility patterns (Cervero and Kockelman; Zhang and Wang).
 
 Brooklyn's highest-risk status challenges Manhattan-centric views. Brooklyn's industrial-conversion stock lacks purpose-built amenities and transit access. Manhattan's resilience reflects newer construction and superior connectivity. The 2.23× efficiency and 68\% cost reduction demonstrate business value—\$1.4M savings and 2.7-month payback justify agency adoption.
 
