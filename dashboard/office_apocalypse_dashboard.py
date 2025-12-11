@@ -693,15 +693,15 @@ def main():
                 <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">NYC Office Buildings</p>
             </div>
             <div style="color: white; padding: 0.5rem;">
-                <h3 style="color: #FFB81C; margin: 0; font-size: 2rem; font-weight: 700;">36</h3>
-                <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">Predictive Features</p>
+                <h3 style="color: #FFB81C; margin: 0; font-size: 2rem; font-weight: 700;">20</h3>
+                <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">Clean Predictive Features</p>
             </div>
             <div style="color: white; padding: 0.5rem;">
                 <h3 style="color: #FFB81C; margin: 0; font-size: 2rem; font-weight: 700;">6</h3>
                 <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">Integrated Datasets</p>
             </div>
             <div style="color: white; padding: 0.5rem;">
-                <h3 style="color: #FFB81C; margin: 0; font-size: 2rem; font-weight: 700;">3.1×</h3>
+                <h3 style="color: #FFB81C; margin: 0; font-size: 2rem; font-weight: 700;">2.23×</h3>
                 <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">Efficiency Improvement</p>
             </div>
         </div>
