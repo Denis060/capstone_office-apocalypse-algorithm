@@ -656,7 +656,7 @@ def main():
     
     # Stunning Header with Animation
     st.markdown('<h1 class="main-header">🏢 Office Apocalypse Algorithm</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="subtitle">AI-Powered NYC Office Building Vacancy Risk Prediction System</p>', unsafe_allow_html=True)
+    st.markdown('<p class="subtitle">NYC Office Building Vacancy Risk Prediction System</p>', unsafe_allow_html=True)
     
     # Champion Badge with Animation
     col1, col2, col3 = st.columns([1, 2, 1])
@@ -766,7 +766,7 @@ def main():
     <div style="color: white; padding: 1rem;">
         <h4 style="color: #FFB81C; margin-top: 0; font-weight: 700;">ℹ️ About This Project</h4>
         <p style="font-size: 0.9rem; line-height: 1.6;">
-            This dashboard provides <strong>AI-powered, building-level vacancy risk predictions</strong> 
+            This dashboard provides <strong>machine learning-based, building-level vacancy risk predictions</strong> 
             for NYC office properties using advanced machine learning.
         </p>
         <p style="font-size: 0.85rem; line-height: 1.6; margin-top: 1rem;">
@@ -827,7 +827,7 @@ def building_lookup_page(df, model, feature_names):
         🏠 Individual Building Risk Analysis
     </h2>
     <p style='color: #002855; font-size: 1.1rem; margin-bottom: 1rem;'>
-        Search and analyze vacancy risk for specific NYC office buildings with AI-powered predictions and SHAP explanations.
+        Search and analyze vacancy risk for specific NYC office buildings with XGBoost predictions and SHAP explanations.
     </p>
     """, unsafe_allow_html=True)
     
