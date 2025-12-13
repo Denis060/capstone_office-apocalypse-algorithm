@@ -56,7 +56,8 @@ st.markdown("""
     /* Global Styles */
     html, body, [class*="css"] {
         font-family: 'Inter', sans-serif;
-        background-color: #f8f9fa;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e8eef5 100%);
+        min-height: 100vh;
     }
     
     /* Main Header with PACE Blue */
@@ -140,13 +141,27 @@ st.markdown("""
         padding: 1.5rem;
         border-radius: 1rem;
         border: 2px solid #003C7D;
-        box-shadow: 0 4px 15px rgba(0, 60, 125, 0.15);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 8px 25px rgba(0, 60, 125, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+    }
+    
+    .metric-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at top-right, rgba(0, 60, 125, 0.05), transparent);
+        border-radius: 1rem;
+        pointer-events: none;
     }
     
     .metric-container:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(0, 60, 125, 0.25);
+        transform: translateY(-8px);
+        box-shadow: 0 12px 35px rgba(0, 60, 125, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        border-color: #0052A5;
     }
     
     /* Risk Level Styling */
@@ -157,6 +172,12 @@ st.markdown("""
         text-transform: uppercase;
         letter-spacing: 1.5px;
         text-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
+        animation: glowRed 2s ease-in-out infinite;
+    }
+    
+    @keyframes glowRed {
+        0%, 100% { text-shadow: 0 2px 4px rgba(220, 53, 69, 0.3); }
+        50% { text-shadow: 0 0 10px rgba(220, 53, 69, 0.7); }
     }
     
     .medium-risk {
@@ -166,6 +187,12 @@ st.markdown("""
         text-transform: uppercase;
         letter-spacing: 1.5px;
         text-shadow: 0 2px 4px rgba(255, 184, 28, 0.3);
+        animation: glowGold 2s ease-in-out infinite;
+    }
+    
+    @keyframes glowGold {
+        0%, 100% { text-shadow: 0 2px 4px rgba(255, 184, 28, 0.3); }
+        50% { text-shadow: 0 0 10px rgba(255, 184, 28, 0.7); }
     }
     
     .low-risk {
@@ -175,6 +202,12 @@ st.markdown("""
         text-transform: uppercase;
         letter-spacing: 1.5px;
         text-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+        animation: glowGreen 2s ease-in-out infinite;
+    }
+    
+    @keyframes glowGreen {
+        0%, 100% { text-shadow: 0 2px 4px rgba(40, 167, 69, 0.3); }
+        50% { text-shadow: 0 0 10px rgba(40, 167, 69, 0.7); }
     }
     
     /* Sidebar Styling - PACE Blue Gradient */
@@ -296,6 +329,29 @@ st.markdown("""
     /* Selectbox and Slider */
     .stSelectbox, .stSlider {
         border-radius: 0.8rem;
+    }
+    
+    /* Enhanced Input Fields */
+    .stSelectbox [data-baseweb="select"] {
+        border-radius: 0.8rem !important;
+        border: 2px solid #003C7D !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .stSelectbox [data-baseweb="select"]:hover {
+        border-color: #0052A5 !important;
+        box-shadow: 0 0 0 3px rgba(0, 60, 125, 0.1) !important;
+    }
+    
+    .stNumberInput input, .stTextInput input {
+        border-radius: 0.8rem !important;
+        border: 2px solid #003C7D !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .stNumberInput input:focus, .stTextInput input:focus {
+        border-color: #0052A5 !important;
+        box-shadow: 0 0 0 3px rgba(0, 60, 125, 0.15) !important;
     }
     
     /* Footer - PACE Branded */
