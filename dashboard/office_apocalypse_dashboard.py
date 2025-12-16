@@ -724,7 +724,7 @@ def main():
     # Team Information
     st.markdown("""
     <div style="text-align: center; margin-bottom: 2rem;">
-        <span class="team-badge">👨‍🎓 Ibrahim Denis Fofanah </span>
+        <span class="team-badge">👨‍🎓 Ibrahim Denis Fofanah (Lead) </span>
         <span class="team-badge">👨‍🎓 Bright Arowny Zaman</span>
         <span class="team-badge">👨‍🎓 Jeevan Hemanth Yendluri</span>
         <br><br>
