@@ -35,7 +35,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
     menu_items={
-        'About': "Office Apocalypse Algorithm - NYC Building Vacancy Risk Prediction\n\nTeam: Ibrahim Denis Fofanah, Bright Arowny Zaman, Jeevan Hemanth Yendluri\nAdvisor: Dr. Krishna Bathula"
+        'About': "Office Apocalypse Algorithm - NYC Building Vacancy Risk Prediction\n\nTeam: Ibrahim Denis Fofanah(Lead), Bright Arowny Zaman, Jeevan Hemanth Yendluri\nAdvisor: Dr. Krishna Bathula"
     }
 )
 
