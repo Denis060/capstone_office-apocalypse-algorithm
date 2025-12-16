@@ -710,7 +710,7 @@ def main():
     """Main dashboard application."""
     
     # Stunning Header with Animation
-    st.markdown('<h1 class="main-header">🏢 Office Apocalypse Algorithm</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">Office Apocalypse Algorithm</h1>', unsafe_allow_html=True)
     st.markdown('<p class="subtitle">NYC Office Building Vacancy Risk Prediction System</p>', unsafe_allow_html=True)
     
     # Champion Badge with Animation
