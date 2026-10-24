@@ -6,7 +6,7 @@
 
 ## Project Overview
 
-The Office Apocalypse Algorithm is a production-ready machine learning framework that predicts office building vacancy risk in New York City. This capstone project integrates six municipal datasets via Borough-Block-Lot (BBL) identifiers to generate building-level risk predictions for policy applications.
+The Office Apocalypse Algorithm is a machine learning framework that predicts office building vacancy risk in New York City. This capstone project integrates six municipal datasets via Borough-Block-Lot (BBL) identifiers to generate building-level risk predictions for policy applications.
 
 **Core Question**: Can we predict which NYC office buildings are at high risk of vacancy using integrated municipal data sources?
 
@@ -21,7 +21,7 @@ The Office Apocalypse Algorithm is a production-ready machine learning framework
 ### COMPLETE - Final Submission Ready
 
 - **Champion Model Deployed**: XGBoost achieving **92.41% ROC-AUC** (vs 88.2% baseline)
-- **Production Dashboard**: Streamlit app with SHAP interpretability deployed
+- **Interactive Dashboard**: Streamlit app with SHAP interpretability deployed
 - **IEEE Technical Paper**: Complete conference paper (LaTeX + Markdown)
 - **Academic Poster**: Full content with 7 professional visualizations
 - **Data Leakage Eliminated**: Systematic validation ensuring realistic performance
@@ -48,7 +48,7 @@ The Office Apocalypse Algorithm is a production-ready machine learning framework
 - **XGBoost Ensemble**: Gradient boosting with 200 estimators, max depth 5
 - **SHAP Interpretability**: Feature importance analysis for policy insights
 - **Calibrated Probabilities**: Each building gets reliable 0.0-1.0 risk score
-- **Production Dashboard**: Streamlit interface for interactive predictions
+- **Interactive Dashboard**: Streamlit interface for interactive predictions
 - **Clean Features**: 36 engineered variables from raw building/economic data
 
 ## Project Structure
@@ -72,7 +72,7 @@ office_apocalypse_algorithm_project/
 │   ├── analyze_data_leakage.py            # Data quality checks
 │   └── [other analysis scripts]
 │
-├── dashboard/                             # Production deployment
+├── dashboard/                             # Streamlit dashboard
 │   ├── app.py                             # Streamlit dashboard
 │   ├── requirements.txt                   # Dashboard dependencies
 │   └── README.md                          # Deployment instructions
@@ -132,7 +132,7 @@ office_apocalypse_algorithm_project/
 - **XGBoost Excellence**: 92.41% ROC-AUC outperforming baseline by 4.2 percentage points
 - **Business Value**: 2.23× efficiency improvement, 68% operational cost reduction
 - **High Precision**: 93.01% precision@10% for top building identification
-- **Production Ready**: Deployed Streamlit dashboard with SHAP interpretability
+- **Deployed**: Streamlit dashboard with SHAP interpretability
 
 ### 2. Data Quality & Validation
 - **Critical Leakage Detection**: Identified and eliminated features causing 99%+ artificial accuracy
@@ -180,7 +180,7 @@ pip install -r requirements.txt
 # Run complete model evaluation
 python scripts/complete_evaluation.py
 
-# Launch production dashboard
+# Launch the dashboard
 streamlit run dashboard/app.py
 
 # Generate poster visualizations
@@ -230,7 +230,7 @@ python scripts/shap_model_interpretation.py
 
 ### Project Demonstrates
 - **Data Science Methodology**: Systematic leakage detection, temporal validation, rigorous evaluation
-- **Machine Learning Engineering**: Production-ready models with SHAP interpretability
+- **Machine Learning Engineering**: Models with SHAP interpretability
 - **Policy Applications**: Geographic insights for NYC municipal decision-making
 - **Technical Communication**: IEEE paper, academic poster, comprehensive documentation
 - **Business Impact**: Quantified efficiency gains and cost reduction metrics
@@ -288,7 +288,7 @@ While we used AI tools for acceleration, the following represent our team's inte
 **3. Technical Implementation**
 - Integrated 6 NYC datasets totaling 18GB+ of raw data
 - Resolved BBL alignment issues across heterogeneous sources
-- Implemented production Streamlit dashboard with 99.8% uptime
+- Implemented an interactive Streamlit dashboard
 - Generated 7 publication-quality visualizations for academic poster
 
 **4. Analysis & Insights**
